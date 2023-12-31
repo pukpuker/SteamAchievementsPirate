@@ -1,4 +1,5 @@
 ﻿using SteamAchivmentsForPirates;
+using System.Drawing;
 
 namespace SteamAchivmentsForPirates
 {
@@ -7,7 +8,6 @@ namespace SteamAchivmentsForPirates
         public static void Main()
         {
             Settings.SettingsParser();
-            Achivments.ShowAchivment("641990", "TheOlympian");
             Achivments.FirstStart("641990");
             int vera = Achivments.GetCount().Item1;
             var thread_InfinityParser = new Thread(() => Achivments.InfinityParser("641990"));

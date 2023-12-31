@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -70,7 +71,6 @@ namespace SteamAchivmentsForPirates
             JObject obj = JObject.Parse(json);
             JArray achievements = (JArray)obj["game"]["availableGameStats"]["achievements"];
             JObject statistician = (JObject)achievements.FirstOrDefault(x => (string)x["name"] == achivka);
-
             if (statistician != null)
             {
                 string displayName = (string)statistician["displayName"];
@@ -146,9 +146,14 @@ namespace SteamAchivmentsForPirates
                     {
                         if (!achivments_old.Contains(one_achivment))
                         {
+                            string eblatoriy = one_achivment;
+                            if (one_achivment.Contains("\r"))
+                            {
+                                eblatoriy = one_achivment.Replace("\r", "");
+                            }
                             Console.WriteLine($"Получено достижение: {one_achivment}");
                             achivments_old.Add(one_achivment);
-                            ShowAchivment(appid, one_achivment);
+                            ShowAchivment(appid, eblatoriy);
                         }
                     }
                 }

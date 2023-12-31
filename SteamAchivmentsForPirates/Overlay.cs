@@ -1,6 +1,8 @@
 using System;
 using System.Drawing;
+using System.Media;
 using System.Net;
+using System.Numerics;
 using System.Windows.Forms;
 
 public class OverlayForm : Form
@@ -27,8 +29,10 @@ public class OverlayForm : Form
         {
             image = Image.FromStream(stream);
         }
-
-
+        SoundPlayer player = new SoundPlayer();
+        player.SoundLocation = "desktop_toast_default.wav";
+        player.Load();
+        player.Play();
         PictureBox pictureBox = new PictureBox
         {
             Image = image,
@@ -74,7 +78,7 @@ public class OverlayForm : Form
     {
         if (this.Location.Y < Screen.PrimaryScreen.Bounds.Height)
         {
-            this.Location = new Point(this.Location.X, this.Location.Y + 5); // Опустите окно на 5 пикселей
+            this.Location = new Point(this.Location.X, this.Location.Y + 5);
         }
         else
         {
