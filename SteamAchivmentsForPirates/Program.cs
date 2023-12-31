@@ -6,12 +6,11 @@ namespace SteamAchivmentsForPirates
     {
         public static void Main()
         {
-            Achivments.ShowAchivment();
-            Console.WriteLine("Привет\n");
             Settings.SettingsParser();
-            Achivments.FirstStart("");
+            Achivments.ShowAchivment("641990", "TheOlympian");
+            Achivments.FirstStart("641990");
             int vera = Achivments.GetCount().Item1;
-            var thread_InfinityParser = new Thread(() => Achivments.InfinityParser(""));
+            var thread_InfinityParser = new Thread(() => Achivments.InfinityParser("641990"));
             thread_InfinityParser.Start();
         }
     }

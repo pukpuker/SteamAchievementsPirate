@@ -9,7 +9,8 @@ namespace SteamAchivmentsForPirates
     public static class Settings
     {
         public static string api_key = "";
-        public static string eshe_chto_to = "";
+        public static string language = "";
+        public static string path = "games\\";
 
         public static void SettingsParser()
         {
@@ -23,9 +24,16 @@ namespace SteamAchivmentsForPirates
                         var fix = line.Split('=');
                         string parametr = fix[0];
                         string value = fix[1];
-                        if (parametr == api_key)
+                        if (!string.IsNullOrWhiteSpace(value))
                         {
-                            api_key = value;
+                            if (parametr == "api_key")
+                            {
+                                api_key = value;
+                            }
+                            else if (parametr == "language")
+                            {
+                                language = value;
+                            }
                         }
                     }
                 }

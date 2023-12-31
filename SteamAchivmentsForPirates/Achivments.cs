@@ -1,10 +1,15 @@
 ﻿using INIParser;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace SteamAchivmentsForPirates
 {
@@ -14,13 +19,13 @@ namespace SteamAchivmentsForPirates
         static List<string> achivments = new System.Collections.Generic.List<string>();
         static List<string> achivments_old = new System.Collections.Generic.List<string>();
 
-        public static void ShowAchivment()
+        public static void StartAchivment(string name, string description, string url)
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Thread t = new Thread(() =>
             {
-                Application.Run(new OverlayForm());
+                Application.Run(new OverlayForm(name, description, url));
             });
             t.Start();
         }
@@ -45,6 +50,35 @@ namespace SteamAchivmentsForPirates
         public static int GetValue_Kolvo(string key)
         {
             return Kolvo.ContainsKey(key) ? Kolvo[key] : 0;
+        }
+
+        public static void ShowAchivment(string appid, string achivka)
+        {
+            var path = Path.Combine(Settings.path, $"{appid}.txt");
+
+            WebClient ugar = new WebClient();
+            string json = "";
+            if (File.Exists(path))
+            {
+                json = File.ReadAllText(path);
+            }
+            else
+            {
+                json = ugar.DownloadString($"https://api.steampowered.com/ISteamUserStats/GetSchemaForGame/v2?appid={appid}&key={Settings.api_key}&l={Settings.language}");
+                File.WriteAllText(path, json);
+            }
+            JObject obj = JObject.Parse(json);
+            JArray achievements = (JArray)obj["game"]["availableGameStats"]["achievements"];
+            JObject statistician = (JObject)achievements.FirstOrDefault(x => (string)x["name"] == achivka);
+
+            if (statistician != null)
+            {
+                string displayName = (string)statistician["displayName"];
+                string description = (string)statistician["description"];
+                string icon = (string)statistician["icon"];
+                Console.WriteLine(displayName);
+                StartAchivment(displayName, description, icon);
+            }
         }
 
         public static (int, List<string>) GetCount()
@@ -96,7 +130,7 @@ namespace SteamAchivmentsForPirates
             var CounterDristos = GetCount();
             int value = CounterDristos.Item1;
             achivments_old = CounterDristos.Item2;
-            SetValue_Kolvo("641990", value);
+            SetValue_Kolvo(appid, value);
         }
 
         public static void InfinityParser(string appid)
@@ -114,6 +148,7 @@ namespace SteamAchivmentsForPirates
                         {
                             Console.WriteLine($"Получено достижение: {one_achivment}");
                             achivments_old.Add(one_achivment);
+                            ShowAchivment(appid, one_achivment);
                         }
                     }
                 }
