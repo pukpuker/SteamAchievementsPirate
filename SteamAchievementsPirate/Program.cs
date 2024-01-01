@@ -7,6 +7,7 @@ namespace SteamAchivmentsForPirates
     {
         public static void Main()
         {
+            Settings.ChangeTitle();
             Settings.SettingsParser();
             Achivments.ShowAchivment("641990", "OpenPrison");
             Achivments.FirstStart("641990");

@@ -67,17 +67,12 @@ public class OverlayForm : Form
 
         Label label = new Label
         {
-            Text = $"<font color='white'>{name}</font><br/><font color='gray'>{description}</font>",
+            Text = $"{name}\n{description}",
+            ForeColor = Color.White,
             Dock = DockStyle.Fill,
             TextAlign = ContentAlignment.MiddleLeft,
             Padding = new Padding(69, 0, 0, 0)
         };
-        label.UseMnemonic = false;
-        label.AutoSize = true;
-
-        // Включаем поддержку HTML
-        label.UseCompatibleTextRendering = true;
-
         this.Controls.Add(pictureBox);
         this.Controls.Add(label);
         timer = new System.Windows.Forms.Timer();
