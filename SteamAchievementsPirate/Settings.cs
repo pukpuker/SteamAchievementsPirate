@@ -46,7 +46,7 @@ namespace SteamAchivmentsForPirates
 
         public static void ChangeTitle()
         {
-            Console.WriteLine($"SteamAchievements Debug");
+            Console.Title = $"SteamAchievements Debug";
         }
     }
 }

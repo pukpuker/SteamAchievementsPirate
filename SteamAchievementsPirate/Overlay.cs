@@ -4,10 +4,19 @@ using System.Drawing;
 using System.Media;
 using System.Net;
 using System.Numerics;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 public class OverlayForm : Form
 {
+
+    [DllImport("user32.dll")]
+    static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int X, int Y, int cx, int cy, uint uFlags);
+
+    static readonly IntPtr HWND_TOPMOST = new IntPtr(-1);
+    const uint SWP_NOSIZE = 0x0001;
+    const uint SWP_NOMOVE = 0x0002;
+
     System.Windows.Forms.Timer timer, timerHide;
     int endPosY;
     int DesktopPos = 30; // 30
@@ -17,6 +26,7 @@ public class OverlayForm : Form
         this.FormBorderStyle = FormBorderStyle.None;
         this.ShowInTaskbar = false;
         this.TopMost = true;
+        this.TopLevel = true;
         this.BackColor = ColorTranslator.FromHtml("#21252D");
         this.Opacity = 1;
         this.Size = new Size(282, 69);
@@ -31,7 +41,7 @@ public class OverlayForm : Form
             swinarnik = false;
             Console.WriteLine(ex.Message);
         }
-        if (!swinarnik)
+        if (swinarnik)
         {
             endPosY = Screen.PrimaryScreen.Bounds.Height - this.Height - DesktopPos;
         }
@@ -64,21 +74,36 @@ public class OverlayForm : Form
             Padding = new Padding(10, 12, 10, 12),
             Width = 64
         };
-
-        Label label = new Label
+        Label label1 = new Label
         {
-            Text = $"{name}\n{description}",
+            Text = $"{name}",
             ForeColor = Color.White,
-            Dock = DockStyle.Fill,
+            Location = new Point(pictureBox.Width, 0), // Расположение label1 справа от pictureBox
+            Size = new Size(this.Width - pictureBox.Width, this.Height / 2 - 10), // Уменьшаем высоту label1
             TextAlign = ContentAlignment.MiddleLeft,
-            Padding = new Padding(69, 0, 0, 0)
+            Padding = new Padding(0, 10, 0, 0)
         };
+        Label label2 = new Label
+        {
+            Text = $"{description}",
+            ForeColor = Color.Gray,
+            Location = new Point(pictureBox.Width, label1.Height), // Расположение label2 ниже label1
+            Size = new Size(this.Width - pictureBox.Width, this.Height / 2 + 10), // Увеличиваем высоту label2
+            TextAlign = ContentAlignment.MiddleLeft,
+            Padding = new Padding(0, 0, 0, 5)
+        };
+        this.Controls.Add(label2);
+        this.Controls.Add(label1);
+
+
         this.Controls.Add(pictureBox);
-        this.Controls.Add(label);
         timer = new System.Windows.Forms.Timer();
         timer.Interval = 1;
         timer.Tick += Timer_Tick;
         timer.Start();
+        this.Load += (sender, e) => {
+            SetWindowPos(this.Handle, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
+        };
     }
     private void Timer_Tick(object sender, EventArgs e)
     {

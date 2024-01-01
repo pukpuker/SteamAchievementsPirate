@@ -35,7 +35,7 @@ namespace SteamAchivmentsForPirates
 
         public static bool GameIsZoomed()
         {
-            IntPtr instance = FindWindow(null, "");
+            IntPtr instance = FindWindow(null, "The Escapists 2");
             return IsIconic(instance);
         }
 

@@ -9,7 +9,7 @@ namespace SteamAchivmentsForPirates
         {
             Settings.ChangeTitle();
             Settings.SettingsParser();
-            Achivments.ShowAchivment("641990", "OpenPrison");
+            //Achivments.ShowAchivment("641990", "OpenPrison");
             Achivments.FirstStart("641990");
             int vera = Achivments.GetCount().Item1;
             var thread_InfinityParser = new Thread(() => Achivments.InfinityParser("641990"));
