@@ -1,3 +1,4 @@
+using SteamAchivmentsForPirates;
 using System;
 using System.Drawing;
 using System.Media;
@@ -9,6 +10,8 @@ public class OverlayForm : Form
 {
     System.Windows.Forms.Timer timer, timerHide;
     int endPosY;
+    int DesktopPos = 30; // 30
+    int WithOverlay = 0;
     public OverlayForm(string name, string description, string url)
     {
         this.FormBorderStyle = FormBorderStyle.None;
@@ -18,7 +21,27 @@ public class OverlayForm : Form
         this.Opacity = 1;
         this.Size = new Size(282, 69);
         this.StartPosition = FormStartPosition.Manual;
-        endPosY = Screen.PrimaryScreen.Bounds.Height - this.Height - 30;
+        bool swinarnik = false;
+        try
+        {
+            swinarnik = Achivments.GameIsZoomed();
+        }
+        catch (Exception ex)
+        {
+            swinarnik = false;
+            Console.WriteLine(ex.Message);
+        }
+        if (!swinarnik)
+        {
+            endPosY = Screen.PrimaryScreen.Bounds.Height - this.Height - DesktopPos;
+        }
+        else
+        {
+            Console.WriteLine("Swinarnik");
+            endPosY = Screen.PrimaryScreen.Bounds.Height - this.Height - WithOverlay;
+        }
+        Console.WriteLine(swinarnik);
+        //endPosY = Screen.PrimaryScreen.Bounds.Height - this.Height - 30;
         this.Location = new Point(Screen.PrimaryScreen.Bounds.Width - this.Width, Screen.PrimaryScreen.Bounds.Height - this.Height - -50); // Уменьшите значение Y, чтобы поднять окно выше
 
 
@@ -44,12 +67,17 @@ public class OverlayForm : Form
 
         Label label = new Label
         {
-            Text = $"{name}\n{description}",
-            ForeColor = Color.White,
+            Text = $"<font color='white'>{name}</font><br/><font color='gray'>{description}</font>",
             Dock = DockStyle.Fill,
             TextAlign = ContentAlignment.MiddleLeft,
             Padding = new Padding(69, 0, 0, 0)
         };
+        label.UseMnemonic = false;
+        label.AutoSize = true;
+
+        // Включаем поддержку HTML
+        label.UseCompatibleTextRendering = true;
+
         this.Controls.Add(pictureBox);
         this.Controls.Add(label);
         timer = new System.Windows.Forms.Timer();

@@ -1,21 +1,23 @@
-﻿using INIParser;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.IO;
-using System.Linq;
+﻿using Newtonsoft.Json.Linq;
 using System.Net;
-using System.Text;
-using System.Threading.Tasks;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace SteamAchivmentsForPirates
 {
     public static class Achivments
     {
+        [DllImport("user32.dll")]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        static extern bool IsIconic(IntPtr hWnd);
+
+        [DllImport("user32.dll")]
+        static extern bool IsZoomed(IntPtr hWnd);
+
+        [DllImport("user32.dll")]
+        static extern IntPtr FindWindow(string lp1, string lp2);
+
+
         private static Dictionary<string, string> app_ids = new Dictionary<string, string>();
         static List<string> achivments = new System.Collections.Generic.List<string>();
         static List<string> achivments_old = new System.Collections.Generic.List<string>();
@@ -29,6 +31,12 @@ namespace SteamAchivmentsForPirates
                 Application.Run(new OverlayForm(name, description, url));
             });
             t.Start();
+        }
+
+        public static bool GameIsZoomed()
+        {
+            IntPtr instance = FindWindow(null, "");
+            return IsIconic(instance);
         }
 
         public static void SetValue(string key, string value)
