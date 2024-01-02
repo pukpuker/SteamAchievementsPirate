@@ -29,6 +29,7 @@
             foreach (var app_id in games_APPIDS)
             {
                 Achivments.FirstStart(app_id);
+                Task.Delay(300).Wait();
                 var thread_InfinityParser = new Thread(() => Achivments.InfinityParser(app_id));
                 thread_InfinityParser.Start();
             }

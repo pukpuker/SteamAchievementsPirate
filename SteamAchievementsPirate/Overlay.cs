@@ -47,10 +47,8 @@ public class OverlayForm : Form
         }
         else
         {
-            Console.WriteLine("Swinarnik");
             endPosY = Screen.PrimaryScreen.Bounds.Height - this.Height - WithOverlay;
         }
-        Console.WriteLine(swinarnik);
         //endPosY = Screen.PrimaryScreen.Bounds.Height - this.Height - 30;
         this.Location = new Point(Screen.PrimaryScreen.Bounds.Width - this.Width, Screen.PrimaryScreen.Bounds.Height - this.Height - -50); // Уменьшите значение Y, чтобы поднять окно выше
 

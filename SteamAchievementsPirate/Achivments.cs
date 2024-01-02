@@ -202,7 +202,7 @@ namespace SteamAchivmentsForPirates
                             {
                                 eblatoriy = one_achivment.Replace("\r", "");
                             }
-                            Console.WriteLine($"Получено достижение: {one_achivment}");
+                            Console.WriteLine($"[debug] Получено достижение: {one_achivment}");
                             achivments_old.Add(one_achivment);
                             ShowAchivment(appid, eblatoriy);
                         }
