@@ -1,4 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
+using System.DirectoryServices.ActiveDirectory;
+using System.IO;
 using System.Net;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
@@ -21,6 +23,7 @@ namespace SteamAchivmentsForPirates
         private static Dictionary<string, string> app_ids = new Dictionary<string, string>();
         static List<string> achivments = new System.Collections.Generic.List<string>();
         static List<string> achivments_old = new System.Collections.Generic.List<string>();
+        static WebClient ugar = new WebClient();
 
         public static void StartAchivment(string name, string description, string url)
         {
@@ -61,11 +64,27 @@ namespace SteamAchivmentsForPirates
             return Kolvo.ContainsKey(key) ? Kolvo[key] : 0;
         }
 
+        public static string GetAppName(string appid)
+        {
+            string json = ugar.DownloadString($"https://api.steampowered.com/ISteamUserStats/GetSchemaForGame/v2?appid={appid}&key={Settings.api_key}&l={Settings.language}");
+            JObject obj = JObject.Parse(json);
+            string game_name = (string)obj["game"]["gameName"];
+            return game_name;
+        }
+
+        public static void CreateCheme(string appid)
+        {
+            var path = Path.Combine(Settings.path, $"{appid}.txt");
+            if (!File.Exists(path))
+            {
+                string json = ugar.DownloadString($"https://api.steampowered.com/ISteamUserStats/GetSchemaForGame/v2?appid={appid}&key={Settings.api_key}&l={Settings.language}");
+                File.WriteAllText(path, json);
+            }
+        }
+
         public static void ShowAchivment(string appid, string achivka)
         {
             var path = Path.Combine(Settings.path, $"{appid}.txt");
-
-            WebClient ugar = new WebClient();
             string json = "";
             if (File.Exists(path))
             {
@@ -73,8 +92,7 @@ namespace SteamAchivmentsForPirates
             }
             else
             {
-                json = ugar.DownloadString($"https://api.steampowered.com/ISteamUserStats/GetSchemaForGame/v2?appid={appid}&key={Settings.api_key}&l={Settings.language}");
-                File.WriteAllText(path, json);
+                CreateCheme(appid);
             }
             JObject obj = JObject.Parse(json);
             JArray achievements = (JArray)obj["game"]["availableGameStats"]["achievements"];
@@ -84,12 +102,35 @@ namespace SteamAchivmentsForPirates
                 string displayName = (string)statistician["displayName"];
                 string description = (string)statistician["description"];
                 string icon = (string)statistician["icon"];
-                Console.WriteLine(displayName);
                 StartAchivment(displayName, description, icon);
             }
         }
 
-        public static (int, List<string>) GetCount()
+        public static void Codex()
+        {
+            string codex_NEW = Path.Combine(System.Environment.GetEnvironmentVariable("PUBLIC"), "Documents\\Steam\\CODEX");
+            foreach (var folder in Directory.GetDirectories(codex_NEW))
+            {
+                string appid = folder.Split('\\')[6];
+                var path = Path.Combine(Settings.path, $"{appid}_info.txt");
+                foreach (var file in Directory.GetFiles(folder))
+                {
+                    if (file.Contains("achievements.ini"))
+                    {
+                        string game = GetAppName(appid);
+                        File.WriteAllText(path, $"{file}|{game}|CODEX|{appid}");
+                        CreateCheme(appid);
+                    }
+                }
+            }
+        }
+
+        public static void ParsingGames()
+        {
+            Codex();
+        }
+
+        public static (int, List<string>) GetCount(string path)
         {
             try
             {
@@ -97,7 +138,7 @@ namespace SteamAchivmentsForPirates
                 List<string> Local_Achivments = new System.Collections.Generic.List<string>();
 
                 string xer = null;
-                string file = File.ReadAllText("C:\\Users\\Public\\Documents\\Steam\\CODEX\\641990\\achievements.ini");
+                string file = File.ReadAllText(path);
                 var xuina = file.Split('[');
                 foreach (var xuina14 in xuina)
                 {
@@ -135,7 +176,8 @@ namespace SteamAchivmentsForPirates
 
         public static void FirstStart(string appid)
         {
-            var CounterDristos = GetCount();
+            string path_combin = Path.Combine(Settings.path, $"{appid}_info.txt");
+            var CounterDristos = GetCount(File.ReadAllText(path_combin).Split('|')[0]);
             int value = CounterDristos.Item1;
             achivments_old = CounterDristos.Item2;
             SetValue_Kolvo(appid, value);
@@ -146,9 +188,10 @@ namespace SteamAchivmentsForPirates
             while (true) 
             {
                 Task.Delay(1000).Wait();
-                var CounterDristos = GetCount();
+                string path_combin = Path.Combine(Settings.path, $"{appid}_info.txt");
+                var CounterDristos = GetCount(File.ReadAllText(path_combin).Split('|')[0]);
                 int value = CounterDristos.Item1;
-                if (value > GetValue_Kolvo("641990"))
+                if (value > GetValue_Kolvo(appid))
                 {
                     foreach (var one_achivment in CounterDristos.Item2)
                     {
