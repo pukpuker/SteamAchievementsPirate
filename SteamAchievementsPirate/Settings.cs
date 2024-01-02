@@ -32,7 +32,14 @@ namespace SteamAchivmentsForPirates
                             }
                             else if (parametr == "language")
                             {
-                                language = value;
+                                if (string.IsNullOrWhiteSpace(value))
+                                {
+                                    language = "english";
+                                }
+                                else
+                                {
+                                    language = value;
+                                }
                             }
                         }
                     }

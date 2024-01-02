@@ -48,7 +48,7 @@
             Thread Start = new Thread(StartThreads);
             Start.Start();
             Console.Write($"Actions: \n[parse] - parse all games in PC \n\nGames:\n{games}\nInput: ");
-            string action = Console.ReadLine();
+            string? action = Console.ReadLine();
             if (action == "parse")
             {
                 Achivments.ParsingGames();
