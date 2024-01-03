@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json.Linq;
+using SteamAchievementsPirate;
 using System.DirectoryServices.ActiveDirectory;
 using System.IO;
 using System.Net;
@@ -21,7 +22,6 @@ namespace SteamAchivmentsForPirates
 
 
         private static Dictionary<string, string> app_ids = new Dictionary<string, string>();
-        static List<string> achivments = new System.Collections.Generic.List<string>();
         static List<string> achivments_old = new System.Collections.Generic.List<string>();
         static WebClient ugar = new WebClient();
 
@@ -125,12 +125,68 @@ namespace SteamAchivmentsForPirates
             }
         }
 
+        public static void FreeTP() // добавить возможность массив путей, т.е. несколько путей в параметрах.
+        {
+            if (!string.IsNullOrWhiteSpace(Settings.freetp_path))
+            {
+                foreach (var directory in Directory.GetDirectories(Settings.freetp_path))
+                {
+                    foreach (var directory_games in Directory.GetDirectories(directory))
+                    {
+                        if (directory_games.Contains("FreeTP"))
+                        {
+                            string appid = File.ReadAllText(Path.Combine(directory, "steam_appid.txt"));
+                            var path = Path.Combine(Settings.path, $"{appid}_info.txt");
+                            string game = GetAppName(appid);
+                            string path_to_achivments = Path.Combine(directory_games, "Achievements");
+                            File.WriteAllText(path, $"{path_to_achivments}|{game}|FreeTP|{appid}");
+                            CreateCheme(appid);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                Console.Clear();
+                Console.WriteLine("FreeTP Path is NULL. The search will only be performed on the paths: \"C:\\Games\" and \"D:\\Games\". Do you want to specify the search path for FreeTP games?");
+                Console.Write("\nInput 'yes' or 'no': ");
+                string ugar = Console.ReadLine();
+                if (ugar.Contains("yes"))
+                {
+                    Actions.FreeTP_Path();
+                }
+                else
+                {
+                    foreach (var one_path in Settings.Path_Def_Games)
+                    {
+                        foreach (var directory in Directory.GetDirectories(one_path))
+                        {
+                            foreach (var directory_games in Directory.GetDirectories(directory))
+                            {
+                                if (directory_games.Contains("FreeTP"))
+                                {
+                                    string appid = File.ReadAllText(Path.Combine(directory, "steam_appid.txt"));
+                                    var path = Path.Combine(Settings.path, $"{appid}_info.txt");
+                                    string game = GetAppName(appid);
+                                    string path_to_achivments = Path.Combine(directory_games, "Achievements");
+                                    File.WriteAllText(path, $"{path_to_achivments}|{game}|FreeTP|{appid}");
+                                    CreateCheme(appid);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+
         public static void ParsingGames()
         {
             Codex();
+            FreeTP();
         }
 
-        public static (int, List<string>) GetCount(string path)
+        public static (int, List<string>) GetCountCodex(string path)
         {
             try
             {
@@ -164,12 +220,11 @@ namespace SteamAchivmentsForPirates
                         }
                     }
                 }
-                achivments = Local_Achivments;
                 return (count, Local_Achivments);
             }
             catch (Exception ex) 
             {
-                Console.WriteLine(ex.ToString());
+                Settings.Exp(ex);
                 return (0, null);
             }            
         }
@@ -177,19 +232,19 @@ namespace SteamAchivmentsForPirates
         public static void FirstStart(string appid)
         {
             string path_combin = Path.Combine(Settings.path, $"{appid}_info.txt");
-            var CounterDristos = GetCount(File.ReadAllText(path_combin).Split('|')[0]);
+            var CounterDristos = GetCountCodex(File.ReadAllText(path_combin).Split('|')[0]);
             int value = CounterDristos.Item1;
             achivments_old = CounterDristos.Item2;
             SetValue_Kolvo(appid, value);
         }
 
-        public static void InfinityParser(string appid)
+        public static void InfinityParserCodex(string appid)
         {
             while (true) 
             {
                 Task.Delay(1000).Wait();
                 string path_combin = Path.Combine(Settings.path, $"{appid}_info.txt");
-                var CounterDristos = GetCount(File.ReadAllText(path_combin).Split('|')[0]);
+                var CounterDristos = GetCountCodex(File.ReadAllText(path_combin).Split('|')[0]);
                 int value = CounterDristos.Item1;
                 if (value > GetValue_Kolvo(appid))
                 {
@@ -198,9 +253,9 @@ namespace SteamAchivmentsForPirates
                         if (!achivments_old.Contains(one_achivment))
                         {
                             string eblatoriy = one_achivment;
-                            if (one_achivment.Contains("\r"))
+                            if (eblatoriy.Contains("\r"))
                             {
-                                eblatoriy = one_achivment.Replace("\r", "");
+                                eblatoriy = eblatoriy.Replace("\r", "");
                             }
                             Console.WriteLine($"[debug] Получено достижение: {one_achivment}");
                             achivments_old.Add(one_achivment);
