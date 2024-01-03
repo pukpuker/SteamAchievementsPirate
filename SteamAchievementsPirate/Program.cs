@@ -5,8 +5,9 @@ namespace SteamAchivmentsForPirates
     public static class SX
     {
         static List<string> games_APPIDS = new List<string>();
-        public static int CODEX = 0;
-        public static int FreeTP = 0;
+        static List<string> Codex_appids = new List<string>();
+        static List<string> FreeTP_appids = new List<string>();
+
 
         public static string Games()
         {
@@ -25,11 +26,11 @@ namespace SteamAchivmentsForPirates
                     games = games + $"{app_name} - {emu}\n";
                     if (emu == "CODEX")
                     {
-                        CODEX++;
+                        Codex_appids.Add(app_id);
                     }
                     else if (emu == "FreeTP")
                     {
-                        FreeTP++;
+                        FreeTP_appids.Add(app_id);
                     }
                 }
             }
@@ -38,11 +39,18 @@ namespace SteamAchivmentsForPirates
 
         public static void StartThreads()
         {
-            foreach (var app_id in games_APPIDS)
+            foreach (var app_id in Codex_appids)
             {
-                Achivments.FirstStart(app_id);
+                Codex.FirstStart(app_id);
                 Task.Delay(300).Wait();
-                var thread_InfinityParser = new Thread(() => Achivments.InfinityParserCodex(app_id));
+                var thread_InfinityParser = new Thread(() => Codex.InfinityParserCodex(app_id));
+                thread_InfinityParser.Start();
+            }
+            foreach (var app_id in FreeTP_appids)
+            {
+                FreeTP.FirstStart(app_id);
+                Task.Delay(300).Wait();
+                var thread_InfinityParser = new Thread(() => FreeTP.InfinityParserFreeTP(app_id));
                 thread_InfinityParser.Start();
             }
         }
@@ -59,19 +67,15 @@ namespace SteamAchivmentsForPirates
             }
             Thread Start = new Thread(StartThreads);
             Start.Start();
-            Console.Write($"Actions: \n[parse] - parse games in PC\n[freetp] - uppdate freetp games folder \n\nGames:\n{games}\nInput: ");
+            Console.Write($"Actions: \n[parse] - parse games in PC\n[freetp_path] - update freetp.org games folder \n\nGames:\n{games}\nInput: ");
             string? action = Console.ReadLine();
             if (action == "parse")
             {
                 Actions.Parse();
             }
-            else if (action == "freetp")
+            else if (action == "freetp_path")
             {
                 Actions.FreeTP_Path();
-            }
-            else if (action == "demo")
-            {
-                Achivments.FreeTP();
             }
             //Achivments.ShowAchivment("641990", "OpenPrison");
         }
