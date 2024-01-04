@@ -11,7 +11,6 @@ namespace SteamAchievementsPirate
     {
         public static (int, List<string>) GetCountCodex(string path)
         {
-            Console.WriteLine(path);
             try
             {
                 int count = 0;

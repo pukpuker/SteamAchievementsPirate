@@ -65,55 +65,69 @@ namespace SteamAchievementsPirate
 
         public static void Parse() // добавить возможность массив путей, т.е. несколько путей в параметрах.
         {
-            if (!string.IsNullOrWhiteSpace(Settings.freetp_path))
+            try
             {
-                foreach (var directory in Directory.GetDirectories(Settings.freetp_path))
+                if (!string.IsNullOrWhiteSpace(Settings.freetp_path))
                 {
-                    foreach (var directory_games in Directory.GetDirectories(directory))
+                    foreach (var directory in Directory.GetDirectories(Settings.freetp_path))
                     {
-                        if (directory_games.Contains("FreeTP"))
+                        foreach (var directory_games in Directory.GetDirectories(directory))
                         {
-                            string appid = File.ReadAllText(Path.Combine(directory, "steam_appid.txt"));
-                            var path = Path.Combine(Settings.path, $"{appid}_info.txt");
-                            string game = Achivments.GetAppName(appid);
-                            string path_to_achivments = Path.Combine(directory_games, "Achievements");
-                            File.WriteAllText(path, $"{path_to_achivments}|{game}|FreeTP|{appid}");
-                            Achivments.CreateCheme(appid);
+                            if (directory_games.Contains("FreeTP"))
+                            {
+                                string appid = File.ReadAllText(Path.Combine(directory, "steam_appid.txt"));
+                                var path = Path.Combine(Settings.path, $"{appid}_info.txt");
+                                string game = Achivments.GetAppName(appid);
+                                string path_to_achivments = Path.Combine(directory_games, "Achievements");
+                                File.WriteAllText(path, $"{path_to_achivments}|{game}|FreeTP|{appid}");
+                                Achivments.CreateCheme(appid);
+                            }
                         }
                     }
                 }
-            }
-            else
-            {
-                Console.Clear();
-                Console.WriteLine("FreeTP Path is NULL. The search will only be performed on the paths: \"C:\\Games\" and \"D:\\Games\". Do you want to specify the search path for FreeTP games?");
-                Console.Write("\nInput 'yes' or 'no': ");
-                string ugar = Console.ReadLine();
-                if (ugar.Contains("yes"))
-                {
-                    Actions.FreeTP_Path();
-                }
                 else
                 {
-                    foreach (var one_path in Settings.Path_Def_Games)
+                    Console.Clear();
+                    Console.WriteLine("FreeTP Path is NULL. The search will only be performed on the paths: \"C:\\Games\" and \"D:\\Games\". Do you want to specify the search path for FreeTP games?");
+                    Console.Write("\nInput 'y' or 'n': ");
+                    string ugar = Console.ReadLine();
+                    if (ugar.Contains("y"))
                     {
-                        foreach (var directory in Directory.GetDirectories(one_path))
+                        Actions.FreeTP_Path();
+                    }
+                    else
+                    {
+                        foreach (var one_path in Settings.Path_Def_Games)
                         {
-                            foreach (var directory_games in Directory.GetDirectories(directory))
+                            foreach (var directory in Directory.GetDirectories(one_path))
                             {
-                                if (directory_games.Contains("FreeTP"))
+                                foreach (var directory_games in Directory.GetDirectories(directory))
                                 {
-                                    string appid = File.ReadAllText(Path.Combine(directory, "steam_appid.txt"));
-                                    var path = Path.Combine(Settings.path, $"{appid}_info.txt");
-                                    string game = Achivments.GetAppName(appid);
-                                    string path_to_achivments = Path.Combine(directory_games, "Achievements");
-                                    File.WriteAllText(path, $"{path_to_achivments}|{game}|FreeTP|{appid}");
-                                    Achivments.CreateCheme(appid);
+                                    if (directory_games.Contains("FreeTP"))
+                                    {
+                                        string appid = File.ReadAllText(Path.Combine(directory, "steam_appid.txt"));
+                                        var path = Path.Combine(Settings.path, $"{appid}_info.txt");
+                                        string game = Achivments.GetAppName(appid);
+                                        string path_to_achivments = Path.Combine(directory_games, "Achievements");
+                                        File.WriteAllText(path, $"{path_to_achivments}|{game}|FreeTP|{appid}");
+                                        Achivments.CreateCheme(appid);
+                                    }
                                 }
                             }
                         }
                     }
                 }
+            }
+            catch (DirectoryNotFoundException ex)
+            {
+                Console.WriteLine("U set incorrect folder. Trying to setup default path... You can change FreeTP path in .env");
+                Settings.UpdateValue("freetp_path", "");
+                Console.WriteLine("Setup to default. After reboot application, type 'parse' to parse FreeTP Games. Press Enter to Exit.");
+                Environment.Exit(0);
+            }
+            catch (Exception ex)
+            {
+                Settings.Exp(ex);
             }
         }
     }

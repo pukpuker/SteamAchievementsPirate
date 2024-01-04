@@ -44,10 +44,20 @@ namespace SteamAchivmentsForPirates
 
         public static string GetAppName(string appid)
         {
-            string json = ugar.DownloadString($"https://api.steampowered.com/ISteamUserStats/GetSchemaForGame/v2?appid={appid}&key={Settings.api_key}&l={Settings.language}");
-            JObject obj = JObject.Parse(json);
-            string game_name = (string)obj["game"]["gameName"];
-            return game_name;
+            try
+            {
+                string json = ugar.DownloadString($"https://api.steampowered.com/ISteamUserStats/GetSchemaForGame/v2?appid={appid}&key={Settings.api_key}&l={Settings.language}");
+                JObject obj = JObject.Parse(json);
+                string game_name = (string)obj["game"]["gameName"];
+                return game_name;
+            }
+            catch (WebException)
+            {
+                Console.WriteLine("403 From API Steam. Most likely incorrect SteamAPI Key. Exit.");
+                Console.ReadKey();
+                Environment.Exit(1);
+                return null;
+            }
         }
 
         public static void CreateCheme(string appid)
