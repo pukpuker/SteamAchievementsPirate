@@ -116,6 +116,7 @@ namespace SteamAchievementsPirate
                             }
                         }
                     }
+                    Console.Clear();
                 }
             }
             catch (DirectoryNotFoundException ex)
