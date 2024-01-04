@@ -55,6 +55,7 @@ namespace SteamAchivmentsForPirates
                 Console.WriteLine("Closing...");
                 Environment.Exit(0);
             }
+            Console.Clear();
             SettingsParser();
         }
 
@@ -166,6 +167,12 @@ namespace SteamAchivmentsForPirates
                     new_lines.Add($"{parametr}={value}");
                 }
                 File.WriteAllLines(env_file, new_lines);
+            }
+            catch (FileNotFoundException)
+            {
+                var status = File.Create(env_file);
+                status.Close();
+                UpdateValue(parametr, value);
             }
             catch (Exception ex)
             {
