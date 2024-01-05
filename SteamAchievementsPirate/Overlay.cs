@@ -60,10 +60,8 @@ public class OverlayForm : Form
         {
             image = Image.FromStream(stream);
         }
-        SoundPlayer player = new SoundPlayer();
-        player.SoundLocation = "desktop_toast_default.wav";
-        player.Load();
-        player.Play();
+        SoundPlayer audio = new SoundPlayer(SteamAchievementsPirate.Properties.Resources.desktop_toast_default);
+        audio.Play();
         PictureBox pictureBox = new PictureBox
         {
             Image = image,

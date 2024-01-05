@@ -4,6 +4,9 @@
     <_LastSelectedProfileId>C:\Users\swordily\source\repos\SteamAchievementsPirate\SteamAchievementsPirate\Properties\PublishProfiles\FolderProfile.pubxml</_LastSelectedProfileId>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Update="achievement_vitrina.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="Overlay.cs">
       <SubType>Form</SubType>
     </Compile>

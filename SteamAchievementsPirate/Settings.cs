@@ -11,6 +11,7 @@ namespace SteamAchivmentsForPirates
 {
     public static class Settings
     {
+        public static readonly string version = "0.0.2";
         static readonly string env_file = ".env";
         public static readonly string[] Path_Def_Games = { "C:\\Games", "D:\\Games" };
         // settings from .env
@@ -22,37 +23,54 @@ namespace SteamAchivmentsForPirates
 
         public static void SetUp()
         {
-            Console.Write("This is your first time running the application, do you want to customize the configuration file? You can do this later by simply editing the \".env\" file through any text editor. Type 'y' or 'n': ");
-            if (Console.ReadLine().Contains("y"))
+            string? api_key = null;
+            Console.Write("This is your first time running the application, do you want to customize the configuration file? You can do this later by simply editing the \".env\" file through any text editor. Type 'y' or 'n' (Def Y): ");
+            string console_stage1 = Console.ReadLine();
+            if (console_stage1.Contains("y") || console_stage1 == "")
             {
-                Console.Write("\nThe application cannot work without the Steam Web Api Key. Do you want to register an API key? Type 'y' - for yes or 'n' for no: ");
-                if (Console.ReadLine().Contains("y"))
+                Console.Write("\nThe application cannot work without the Steam Web Api Key. Do you want to register an API key?\nYou can also try using a free key, but there is a chance that it will not work. For it, Type 'f'\n\nType 'y', Type 'n' or Type 'f' (Def Y): ");
+                string? console_stage2 = Console.ReadLine();
+                if (console_stage2.Contains("y") || console_stage2 == "")
                 {
                     Process.Start("explorer.exe", "https://steamcommunity.com/dev/apikey");
                     Console.Clear();
                     Console.Write("Enter your Steam Web Api key: ");
-                    string? api_key = Console.ReadLine();
-                    UpdateValue("api_key", api_key);
-                    Console.Write("\nEnter your language For achiev and etc. (e.g russian | english): ");
-                    string? language = Console.ReadLine();
-                    UpdateValue("language", language);
-                    Console.Write("\nAre you using repacks from the FreeTP site? Enter 'y' or 'n': ");
-                    if (Console.ReadLine().Contains("y"))
-                    {
-                        Console.Write("\nWrite Folder Path where u install FreeTP Repacks. (e.g. C:\\Games): ");
-                        string path = Console.ReadLine();
-                        UpdateValue("freetp_path", path);
-                    }
+                    api_key = Console.ReadLine();
+                }
+                else if (console_stage2.Contains("f"))
+                {
+                    api_key = "FREE";
                 }
                 else
                 {
                     Console.WriteLine("The application cannot work without the Steam Web Api Key. Closing...");
                     Environment.Exit(0);
                 }
+                UpdateValue("api_key", api_key);
+                Console.Write("\nEnter your language For achiev and etc. (e.g russian | english. Def english): ");
+                string? language = Console.ReadLine();
+                if (language == "")
+                {
+                    UpdateValue("language", "english");
+                }
+                else
+                {
+                    UpdateValue("language", language);
+                }
+                Console.Write("\nAre you using repacks from the FreeTP site? Enter 'y' or 'n' (Def N): ");
+                string console_stage3 = Console.ReadLine();
+                if (console_stage3.Contains("y"))
+                {
+                    Console.Write("\nWrite Folder Path where u install FreeTP Repacks. (e.g. C:\\Games): ");
+                    string path = Console.ReadLine();
+                    UpdateValue("freetp_path", path);
+                }
             }
             else
             {
-                Console.WriteLine("Closing...");
+                Console.Clear();
+                Console.WriteLine("Edit the .env file and run the application, or run it again and select 'y' for automatic editing. Press ENTER to close.");
+                Console.ReadKey();
                 Environment.Exit(0);
             }
             Console.Clear();
@@ -75,7 +93,7 @@ namespace SteamAchivmentsForPirates
                 if (File.Exists(env_file))
                 {
                     var lines = File.ReadAllLines(env_file);
-                    if (!(lines.Length < 1))
+                    if (lines.Length > 10)
                     {
                         foreach (var line in lines)
                         {
@@ -88,7 +106,14 @@ namespace SteamAchivmentsForPirates
                                 {
                                     if (parametr == "api_key")
                                     {
-                                        api_key = value;
+                                        if (value == "FREE")
+                                        {
+                                            api_key = "1B01FE5A4ED8E822F7763B63F7A8D5FE";
+                                        }
+                                        else
+                                        {
+                                            api_key = value;
+                                        }
                                     }
                                     else if (parametr == "language")
                                     {

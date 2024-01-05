@@ -4,10 +4,9 @@ namespace SteamAchivmentsForPirates
 {
     public static class SX
     {
-        static List<string> games_APPIDS = new List<string>();
-        static List<string> Codex_appids = new List<string>();
-        static List<string> FreeTP_appids = new List<string>();
-
+        public static List<string> games_APPIDS = new List<string>();
+        public static List<string> Codex_appids = new List<string>();
+        public static List<string> FreeTP_appids = new List<string>();
 
         public static string Games()
         {
@@ -19,6 +18,7 @@ namespace SteamAchivmentsForPirates
                 {
                     string file_info = File.ReadAllText(game);
                     var splitted = file_info.Split('|');
+                    string pathik = splitted[0];
                     string app_name = splitted[1];
                     string emu = splitted[2];
                     string app_id = splitted[3];
@@ -67,7 +67,7 @@ namespace SteamAchivmentsForPirates
             }
             Thread Start = new Thread(StartThreads);
             Start.Start();
-            Console.Write($"Actions: \n[parse] - parse games in PC\n[freetp_path] - update freetp.org games folder \n\nGames:\n{games}\nInput: ");
+            Console.Write($"Actions: \n[parse] - parse games in PC\n[freetp_path] - update freetp.org games folder\n[achiv] - activate 'form' with all achievement\n\nGames:\n{games}\nInput: ");
             string? action = Console.ReadLine();
             if (action == "parse")
             {
@@ -76,6 +76,10 @@ namespace SteamAchivmentsForPirates
             else if (action == "freetp_path")
             {
                 Actions.FreeTP_Path();
+            }
+            else if (action == "achiv")
+            {
+                Actions.MyAchivment();
             }
             //Achivments.ShowAchivment("641990", "OpenPrison");
         }
