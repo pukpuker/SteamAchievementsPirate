@@ -19,12 +19,6 @@ namespace SteamAchivmentsForPirates
             });
             t.Start();
         }
-
-        public static void GetPercentAchievements()
-        {
-            // https://api.steampowered.com/ISteamUserStats/GetGlobalAchievementPercentagesForApp/v0002/?gameid=641990&format=json
-        }
-
         public static bool DownloadAchievements(string appid)
         {
             try
@@ -94,6 +88,12 @@ namespace SteamAchivmentsForPirates
             {
                 string json = ugar.DownloadString($"https://api.steampowered.com/ISteamUserStats/GetSchemaForGame/v2?appid={appid}&key={Settings.api_key}&l={Settings.language}");
                 File.WriteAllText(path, json);
+            }
+            string percenet_file = $"{Settings.path}\\{appid}_percents.txt";
+            if (!File.Exists(percenet_file))
+            {
+                string json = ugar.DownloadString($"https://api.steampowered.com/ISteamUserStats/GetGlobalAchievementPercentagesForApp/v0002/?gameid={appid}&format=json");
+                File.WriteAllText(percenet_file, json);
             }
         }
 

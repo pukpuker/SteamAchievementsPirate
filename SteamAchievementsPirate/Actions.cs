@@ -76,11 +76,6 @@ namespace SteamAchievementsPirate
                 t.Start();
             }
         }
-
-        public static void Hours()
-        {
-
-        }
         //actions
     }
 }

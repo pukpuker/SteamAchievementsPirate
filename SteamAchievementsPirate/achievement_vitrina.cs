@@ -1,10 +1,14 @@
 ﻿using Newtonsoft.Json.Linq;
 using SteamAchivmentsForPirates;
+using System.IO;
+using System.Reflection.PortableExecutable;
 
 namespace SteamAchievementsPirate
 {
     public partial class achievement_vitrina : Form
     {
+        public static string app_id = "";
+
         public achievement_vitrina()
         {
             InitializeComponent();
@@ -27,14 +31,16 @@ namespace SteamAchievementsPirate
         private (int, int, int, int) Sort(string appid, Panel panel, bool locked, int i)
         {
             var path = Path.Combine(Settings.path, $"{appid}.txt");
+            var pathik = Path.Combine(Settings.path, $"{appid}_percents.txt");
             string json = "";
-            if (File.Exists(path))
+            if (File.Exists(path) && File.Exists(pathik))
             {
                 json = File.ReadAllText(path);
             }
             else
             {
                 Achievements.CreateCheme(appid);
+                json = File.ReadAllText(path);
             }
             JObject obj = JObject.Parse(json);
             JArray achievements = (JArray)obj["game"]["availableGameStats"]["achievements"];
@@ -99,6 +105,13 @@ namespace SteamAchievementsPirate
                     }
                     else if (!locked && local_locked == 0)
                     {
+                        string pathik_JSON = File.ReadAllText(pathik);
+                        JObject objIK = JObject.Parse(pathik_JSON);
+                        JArray achievements_percents = (JArray)objIK["achievementpercentages"]["achievements"];
+                        JObject statistician_pizdos = (JObject)achievements_percents.FirstOrDefault(x => (string)x["name"] == name);
+                        double displayNameFinoUgr = (double)statistician_pizdos["percent"];
+                        displayNameFinoUgr = Math.Round(displayNameFinoUgr, 2);
+
                         PictureBox newPictureBox = new PictureBox
                         {
                             Size = new Size(64, 64),
@@ -117,12 +130,22 @@ namespace SteamAchievementsPirate
                         {
                             Text = $"{description}",
                             Location = new Point(90, 43 + (74 * i)),
-                            Font = new Font("Arial", 8),
+                            Font = new Font("Arial", 9),
+                            ForeColor = Color.Gray,
+                            AutoSize = true
+                        };
+                        Label percent = new Label
+                        {
+                            Text = $"{displayNameFinoUgr}% of players have this achievement",
+                            Location = new Point(90, 58 + (74 * i)),
+                            Font = new Font("Arial", 9),
+                            ForeColor = Color.Gray,
                             AutoSize = true
                         };
                         panel.Controls.Add(newPictureBox);
                         panel.Controls.Add(newLabel);
                         panel.Controls.Add(newLabel2);
+                        panel.Controls.Add(percent);
                         i++;
                     }
                 }
@@ -144,6 +167,7 @@ namespace SteamAchievementsPirate
             }
             Button button = (Button)sender;
             string appid = button.Text;
+            app_id = appid;
             Panel panel = new Panel
             {
                 AutoScroll = true,
@@ -157,6 +181,32 @@ namespace SteamAchievementsPirate
             int unlocked_ach = ultra.Item3;
             int locked_ach = ultra.Item4;
             label_information.Text = $"Hidden: {count_hidden}\nUnlocked: {unlocked_ach}\nLocked: {locked_ach}";
+        }
+
+        private void button1_Click(object sender, EventArgs e) // redownload
+        {
+            if (!string.IsNullOrWhiteSpace(app_id))
+            {
+                string path = Path.Combine(Settings.path, $"AchiviementsPhotos");
+                var question = MessageBox.Show($"Are you sure you want to download files for the game number: {app_id}", "Achievements", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                if (question == DialogResult.Yes)
+                {
+                    var directory = Directory.GetFiles(path);
+                    foreach (var file in directory)
+                    {
+                        if (Path.GetFileName(file).StartsWith(app_id))
+                        {
+                            File.Delete(file);
+                        }
+                    }
+                    Achievements.DownloadAchievements(app_id);
+                    MessageBox.Show("All pictures have been re-uploaded", "Achievements", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+            }
+            else
+            {
+                MessageBox.Show("First select a game", "Achievements", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
     }
 }

@@ -4,7 +4,7 @@ namespace SteamAchivmentsForPirates
 {
     public static class Settings
     {
-        public static readonly string version = "0.1.0";
+        public static readonly string version = "0.1.1";
         static readonly string env_file = ".env";
         public static readonly string[] Path_Def_Games = { "C:\\Games", "D:\\Games" };
         
