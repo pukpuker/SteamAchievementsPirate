@@ -111,7 +111,10 @@ namespace SteamAchievementsPirate
                         JObject statistician_pizdos = (JObject)achievements_percents.FirstOrDefault(x => (string)x["name"] == name);
                         double displayNameFinoUgr = (double)statistician_pizdos["percent"];
                         displayNameFinoUgr = Math.Round(displayNameFinoUgr, 2);
-
+                        if (displayNameFinoUgr <= 10)
+                        {
+                            // rare
+                        }
                         PictureBox newPictureBox = new PictureBox
                         {
                             Size = new Size(64, 64),
@@ -181,32 +184,6 @@ namespace SteamAchievementsPirate
             int unlocked_ach = ultra.Item3;
             int locked_ach = ultra.Item4;
             label_information.Text = $"Hidden: {count_hidden}\nUnlocked: {unlocked_ach}\nLocked: {locked_ach}";
-        }
-
-        private void button1_Click(object sender, EventArgs e) // redownload
-        {
-            if (!string.IsNullOrWhiteSpace(app_id))
-            {
-                string path = Path.Combine(Settings.path, $"AchiviementsPhotos");
-                var question = MessageBox.Show($"Are you sure you want to download files for the game number: {app_id}", "Achievements", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-                if (question == DialogResult.Yes)
-                {
-                    var directory = Directory.GetFiles(path);
-                    foreach (var file in directory)
-                    {
-                        if (Path.GetFileName(file).StartsWith(app_id))
-                        {
-                            File.Delete(file);
-                        }
-                    }
-                    Achievements.DownloadAchievements(app_id);
-                    MessageBox.Show("All pictures have been re-uploaded", "Achievements", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }
-            }
-            else
-            {
-                MessageBox.Show("First select a game", "Achievements", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
         }
     }
 }
