@@ -11,9 +11,10 @@ namespace SteamAchivmentsForPirates
 {
     public static class Settings
     {
-        public static readonly string version = "0.0.2";
+        public static readonly string version = "0.1.0";
         static readonly string env_file = ".env";
         public static readonly string[] Path_Def_Games = { "C:\\Games", "D:\\Games" };
+        
         // settings from .env
         public static string api_key = "";
         public static string language = "";
@@ -93,7 +94,7 @@ namespace SteamAchivmentsForPirates
                 if (File.Exists(env_file))
                 {
                     var lines = File.ReadAllLines(env_file);
-                    if (lines.Length > 10)
+                    if (lines.Length > 2)
                     {
                         foreach (var line in lines)
                         {

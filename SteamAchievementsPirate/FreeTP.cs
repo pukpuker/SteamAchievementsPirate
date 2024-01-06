@@ -57,7 +57,7 @@ namespace SteamAchievementsPirate
                         Console.WriteLine($"[debug] Получено достижение: {one_achivment}");
                         fck_line.Add(one_achivment);
                         File.WriteAllLines(local_path, fck_line);
-                        Achivments.ShowAchivment(appid, eblatoriy);
+                        Achievements.ShowAchivment(appid, eblatoriy);
                     }
                 }
             }
@@ -77,10 +77,10 @@ namespace SteamAchievementsPirate
                             {
                                 string appid = File.ReadAllText(Path.Combine(directory, "steam_appid.txt"));
                                 var path = Path.Combine(Settings.path, $"{appid}_info.txt");
-                                string game = Achivments.GetAppName(appid);
+                                string game = Achievements.GetAppName(appid);
                                 string path_to_achivments = Path.Combine(directory_games, "Achievements");
                                 File.WriteAllText(path, $"{path_to_achivments}|{game}|FreeTP|{appid}");
-                                Achivments.CreateCheme(appid);
+                                Achievements.CreateCheme(appid);
                             }
                         }
                     }
@@ -107,10 +107,10 @@ namespace SteamAchievementsPirate
                                     {
                                         string appid = File.ReadAllText(Path.Combine(directory, "steam_appid.txt"));
                                         var path = Path.Combine(Settings.path, $"{appid}_info.txt");
-                                        string game = Achivments.GetAppName(appid);
+                                        string game = Achievements.GetAppName(appid);
                                         string path_to_achivments = Path.Combine(directory_games, "Achievements");
                                         File.WriteAllText(path, $"{path_to_achivments}|{game}|FreeTP|{appid}");
-                                        Achivments.CreateCheme(appid);
+                                        Achievements.CreateCheme(appid);
                                     }
                                 }
                             }

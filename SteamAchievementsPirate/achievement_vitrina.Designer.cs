@@ -39,7 +39,7 @@
             MaximizeBox = false;
             Name = "achievement_vitrina";
             ShowIcon = false;
-            Text = "Achievements [Only Codex]";
+            Text = "Achievements";
             Load += achievement_vitrina_Load;
             ResumeLayout(false);
         }

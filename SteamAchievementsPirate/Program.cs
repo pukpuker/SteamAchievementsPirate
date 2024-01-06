@@ -55,18 +55,8 @@ namespace SteamAchivmentsForPirates
             }
         }
 
-        public static void Main()
+        public static void ConsoleStart(string games)
         {
-            Settings.ChangeTitle();
-            Settings.SettingsParser();
-            string games = Games();
-            if (string.IsNullOrWhiteSpace(games))
-            {
-                Achivments.ParsingGames();
-                Main();
-            }
-            Thread Start = new Thread(StartThreads);
-            Start.Start();
             Console.Write($"Actions: \n[parse] - parse games in PC\n[freetp_path] - update freetp.org games folder\n[achiv] - activate 'form' with all achievement\n\nGames:\n{games}\nInput: ");
             string? action = Console.ReadLine();
             if (action == "parse")
@@ -80,7 +70,24 @@ namespace SteamAchivmentsForPirates
             else if (action == "achiv")
             {
                 Actions.MyAchivment();
+                Console.Clear();
+                ConsoleStart(games);
             }
+        }
+
+        public static void Main()
+        {
+            Settings.ChangeTitle();
+            Settings.SettingsParser();
+            string games = Games();
+            if (string.IsNullOrWhiteSpace(games))
+            {
+                Achievements.ParsingGames();
+                Main();
+            }
+            Thread Start = new Thread(StartThreads);
+            Start.Start();
+            ConsoleStart(games);
             //Achivments.ShowAchivment("641990", "OpenPrison");
         }
     }

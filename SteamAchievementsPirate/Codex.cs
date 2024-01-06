@@ -89,7 +89,7 @@ namespace SteamAchievementsPirate
                         Console.WriteLine($"[debug] Получено достижение: {one_achivment}");
                         fck_line.Add(one_achivment);
                         File.WriteAllLines(local_path, fck_line);
-                        Achivments.ShowAchivment(appid, eblatoriy);
+                        Achievements.ShowAchivment(appid, eblatoriy);
                     }
                 }
             }
@@ -106,9 +106,9 @@ namespace SteamAchievementsPirate
                 {
                     if (file.Contains("achievements.ini"))
                     {
-                        string game = Achivments.GetAppName(appid);
+                        string game = Achievements.GetAppName(appid);
                         File.WriteAllText(path, $"{file}|{game}|CODEX|{appid}");
-                        Achivments.CreateCheme(appid);
+                        Achievements.CreateCheme(appid);
                     }
                 }
             }

@@ -1,11 +1,7 @@
-using SteamAchivmentsForPirates;
-using System;
-using System.Drawing;
 using System.Media;
 using System.Net;
-using System.Numerics;
 using System.Runtime.InteropServices;
-using System.Windows.Forms;
+using Label = System.Windows.Forms.Label;
 
 public class OverlayForm : Form
 {
@@ -32,23 +28,21 @@ public class OverlayForm : Form
         this.Size = new Size(282, 69);
         this.StartPosition = FormStartPosition.Manual;
         bool swinarnik = false;
-        try
-        {
-            swinarnik = Achivments.GameIsZoomed();
-        }
-        catch (Exception ex)
-        {
-            swinarnik = false;
-            Console.WriteLine(ex.Message);
-        }
-        if (swinarnik)
-        {
-            endPosY = Screen.PrimaryScreen.Bounds.Height - this.Height - DesktopPos;
-        }
-        else
-        {
-            endPosY = Screen.PrimaryScreen.Bounds.Height - this.Height - WithOverlay;
-        }
+        //try
+        //{
+        //    swinarnik = Achivments.GameIsZoomed();
+        //}
+        //catch (Exception ex)
+        //{
+        //    swinarnik = false;
+        //    Console.WriteLine(ex.Message);
+        //}
+        //if (swinarnik)
+        //{
+        //    endPosY = Screen.PrimaryScreen.Bounds.Height - this.Height - DesktopPos;
+        //}
+        endPosY = Screen.PrimaryScreen.Bounds.Height - this.Height - WithOverlay;
+
         //endPosY = Screen.PrimaryScreen.Bounds.Height - this.Height - 30;
         this.Location = new Point(Screen.PrimaryScreen.Bounds.Width - this.Width, Screen.PrimaryScreen.Bounds.Height - this.Height - -50); // Уменьшите значение Y, чтобы поднять окно выше
 
@@ -70,28 +64,41 @@ public class OverlayForm : Form
             Padding = new Padding(10, 12, 10, 12),
             Width = 64
         };
-        Label label1 = new Label
+        if (string.IsNullOrWhiteSpace(description))
         {
-            Text = $"{name}",
-            ForeColor = Color.White,
-            Location = new Point(pictureBox.Width, 0), // Расположение label1 справа от pictureBox
-            Size = new Size(this.Width - pictureBox.Width, this.Height / 2 - 10), // Уменьшаем высоту label1
-            TextAlign = ContentAlignment.MiddleLeft,
-            Padding = new Padding(0, 10, 0, 0)
-        };
-        Label label2 = new Label
+            Label labelik = new Label
+            {
+                Text = $"{name}",
+                ForeColor = Color.White,
+                Dock = DockStyle.Fill,
+                TextAlign = ContentAlignment.MiddleLeft,
+                Padding = new Padding(69, 0, 0, 0)
+            };
+            this.Controls.Add(labelik);
+        }
+        else
         {
-            Text = $"{description}",
-            ForeColor = Color.Gray,
-            Location = new Point(pictureBox.Width, label1.Height), // Расположение label2 ниже label1
-            Size = new Size(this.Width - pictureBox.Width, this.Height / 2 + 10), // Увеличиваем высоту label2
-            TextAlign = ContentAlignment.MiddleLeft,
-            Padding = new Padding(0, 0, 0, 5)
-        };
-        this.Controls.Add(label2);
-        this.Controls.Add(label1);
-
-
+            Label label1 = new Label
+            {
+                Text = $"{name}",
+                ForeColor = Color.White,
+                Location = new Point(pictureBox.Width, 0), // Расположение label1 справа от pictureBox
+                Size = new Size(this.Width - pictureBox.Width, this.Height / 2 - 10), // Уменьшаем высоту label1
+                TextAlign = ContentAlignment.MiddleLeft,
+                Padding = new Padding(0, 10, 0, 0)
+            };
+            Label label2 = new Label
+            {
+                Text = $"{description}",
+                ForeColor = Color.Gray,
+                Location = new Point(pictureBox.Width, label1.Height), // Расположение label2 ниже label1
+                Size = new Size(this.Width - pictureBox.Width, this.Height / 2 + 10), // Увеличиваем высоту label2
+                TextAlign = ContentAlignment.MiddleLeft,
+                Padding = new Padding(0, 0, 0, 5)
+            };
+            this.Controls.Add(label2);
+            this.Controls.Add(label1);
+        }
         this.Controls.Add(pictureBox);
         timer = new System.Windows.Forms.Timer();
         timer.Interval = 1;
