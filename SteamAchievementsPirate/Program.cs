@@ -58,7 +58,7 @@ namespace SteamAchivmentsForPirates
         public static void ConsoleStart(string games)
         {
             Console.Clear();
-            Console.Write($"Actions: \n[parse] - parse games in PC\n[freetp_path] - update freetp.org games folder\n[achiv] - activate 'form' with all achievement\n\nGames:\n{games}\nInput: ");
+            Console.Write($"Actions: \n[parse] - parse games in PC\n[freetp_path] - update freetp.org games folder\n[achiv] - check ur achievements\n\nGames:\n{games}\nInput: ");
             string? action = Console.ReadLine();
             if (action == "parse")
             {
