@@ -28,13 +28,23 @@
         /// </summary>
         private void InitializeComponent()
         {
+            label_information = new Label();
             SuspendLayout();
+            // 
+            // label_information
+            // 
+            label_information.AutoSize = true;
+            label_information.Location = new Point(786, 9);
+            label_information.Name = "label_information";
+            label_information.Size = new Size(0, 15);
+            label_information.TabIndex = 0;
             // 
             // achievement_vitrina
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 450);
+            ClientSize = new Size(886, 463);
+            Controls.Add(label_information);
             FormBorderStyle = FormBorderStyle.FixedDialog;
             MaximizeBox = false;
             Name = "achievement_vitrina";
@@ -42,8 +52,11 @@
             Text = "Achievements";
             Load += achievement_vitrina_Load;
             ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
+
+        private Label label_information;
     }
 }

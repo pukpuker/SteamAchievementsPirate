@@ -57,6 +57,7 @@ namespace SteamAchivmentsForPirates
 
         public static void ConsoleStart(string games)
         {
+            Console.Clear();
             Console.Write($"Actions: \n[parse] - parse games in PC\n[freetp_path] - update freetp.org games folder\n[achiv] - activate 'form' with all achievement\n\nGames:\n{games}\nInput: ");
             string? action = Console.ReadLine();
             if (action == "parse")
@@ -70,7 +71,10 @@ namespace SteamAchivmentsForPirates
             else if (action == "achiv")
             {
                 Actions.MyAchivment();
-                Console.Clear();
+                ConsoleStart(games);
+            }
+            else
+            {
                 ConsoleStart(games);
             }
         }

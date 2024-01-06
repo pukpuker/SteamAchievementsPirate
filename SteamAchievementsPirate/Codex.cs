@@ -86,7 +86,9 @@ namespace SteamAchievementsPirate
                         {
                             eblatoriy = eblatoriy.Replace("\r", "");
                         }
+#if DEBUG
                         Console.WriteLine($"[debug] Получено достижение: {one_achivment}");
+#endif
                         fck_line.Add(one_achivment);
                         File.WriteAllLines(local_path, fck_line);
                         Achievements.ShowAchivment(appid, eblatoriy);

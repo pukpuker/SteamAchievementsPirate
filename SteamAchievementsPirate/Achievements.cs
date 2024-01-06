@@ -1,11 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
 using SteamAchievementsPirate;
-using System.DirectoryServices.ActiveDirectory;
-using System.IO;
 using System.Net;
-using System.Runtime.InteropServices;
-using System.Windows.Forms;
-using static System.Windows.Forms.LinkLabel;
 
 namespace SteamAchivmentsForPirates
 {
@@ -23,6 +18,11 @@ namespace SteamAchivmentsForPirates
                 Application.Run(new OverlayForm(name, description, url));
             });
             t.Start();
+        }
+
+        public static void GetPercentAchievements()
+        {
+            // https://api.steampowered.com/ISteamUserStats/GetGlobalAchievementPercentagesForApp/v0002/?gameid=641990&format=json
         }
 
         public static bool DownloadAchievements(string appid)
