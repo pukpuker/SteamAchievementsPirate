@@ -1,7 +1,5 @@
 ﻿using Newtonsoft.Json.Linq;
 using SteamAchivmentsForPirates;
-using System.IO;
-using System.Reflection.PortableExecutable;
 
 namespace SteamAchievementsPirate
 {
@@ -39,6 +37,7 @@ namespace SteamAchievementsPirate
             }
             else
             {
+                Achievements.DownloadAchievements(appid);
                 Achievements.CreateCheme(appid);
                 json = File.ReadAllText(path);
             }
@@ -115,6 +114,15 @@ namespace SteamAchievementsPirate
                         {
                             // rare
                         }
+                        //PictureBox Rare = new PictureBox
+                        //{
+                        //    Size = new Size(80, 80),
+                        //    Location = new Point(0, 10 + (74 * i)),
+                        //    Image = Image.FromFile("final.gif"),
+                        //    Padding = new Padding(0, 0, 0, 0),
+                        //    SizeMode = PictureBoxSizeMode.AutoSize
+                        //};
+
                         PictureBox newPictureBox = new PictureBox
                         {
                             Size = new Size(64, 64),
@@ -149,6 +157,7 @@ namespace SteamAchievementsPirate
                         panel.Controls.Add(newLabel);
                         panel.Controls.Add(newLabel2);
                         panel.Controls.Add(percent);
+                        //panel.Controls.Add(Rare);
                         i++;
                     }
                 }

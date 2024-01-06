@@ -214,9 +214,9 @@ namespace SteamAchivmentsForPirates
         public static void ChangeTitle()
         {
 #if READYTORELEASE
-            Console.Title = $"SteamAchievements";
+            Console.Title = $"SteamAchievements. Version: {version}";
 #elif DEBUG
-            Console.Title = $"SteamAchievements Debug";
+            Console.Title = $"SteamAchievements Debug {Settings.version}";
 #endif
         }
     }

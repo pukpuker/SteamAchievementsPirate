@@ -23,7 +23,7 @@ namespace SteamAchivmentsForPirates
                     string emu = splitted[2];
                     string app_id = splitted[3];
                     games_APPIDS.Add(app_id);
-                    games = games + $"{app_name} - {emu}\n";
+                    games = games + $"{app_name} - {emu} - {app_id}\n";
                     if (emu == "CODEX")
                     {
                         Codex_appids.Add(app_id);
@@ -63,10 +63,12 @@ namespace SteamAchivmentsForPirates
             if (action == "parse")
             {
                 Actions.Parse();
+                ConsoleStart(games);
             }
             else if (action == "freetp_path")
             {
                 Actions.FreeTP_Path();
+                ConsoleStart(games);
             }
             else if (action == "achiv")
             {
