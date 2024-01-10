@@ -28,145 +28,159 @@ namespace SteamAchievementsPirate
 
         private (int, int, int, int) Sort(string appid, Panel panel, bool locked, int i)
         {
-            var path = Path.Combine(Settings.path, $"{appid}.txt");
-            var pathik = Path.Combine(Settings.path, $"{appid}_percents.txt");
-            string json = "";
-            if (File.Exists(path) && File.Exists(pathik))
+            try
             {
-                json = File.ReadAllText(path);
+                var path = Path.Combine(Settings.path, $"{appid}.txt");
+                var pathik = Path.Combine(Settings.path, $"{appid}_percents.txt");
+                string json = "";
+                if (File.Exists(path) && File.Exists(pathik))
+                {
+                    json = File.ReadAllText(path);
+                }
+                else
+                {
+                    Achievements.DownloadAchievements(appid);
+                    Achievements.CreateCheme(appid);
+                    json = File.ReadAllText(path);
+                }
+                JObject obj = JObject.Parse(json);
+                JArray achievements = (JArray)obj["game"]["availableGameStats"]["achievements"];
+                int Count = achievements.Count;
+                int count_hidden = 0;
+                int unlocked_ach = 0;
+                int locked_ach = 0;
+                foreach (JObject achievement in achievements)
+                {
+                    int local_locked = 0;
+                    //
+                    string name = (string)achievement["name"];
+                    string displayName = (string)achievement["displayName"];
+                    string description = (string)achievement["description"];
+                    int hidden = (int)achievement["hidden"];
+                    //
+
+                    string photo_path = "";
+
+                    string local_path = Path.Combine(Settings.path, $"{appid}_achievements.txt");
+                    List<string> fck_line = new List<string>(File.ReadAllLines(local_path));
+                    if (fck_line.Contains(name))
+                    {
+                        photo_path = Path.Combine(Settings.path, $"AchiviementsPhotos", $"{appid}_{name}_default.jpg");
+                        unlocked_ach++;
+                    }
+                    else
+                    {
+                        photo_path = Path.Combine(Settings.path, $"AchiviementsPhotos", $"{appid}_{name}_gray.jpg");
+                        locked_ach++;
+                        local_locked = 1;
+                    }
+                    if (hidden == 0)
+                    {
+                        if (locked && local_locked == 1)
+                        {
+                            PictureBox newPictureBox = new PictureBox
+                            {
+                                Size = new Size(64, 64),
+                                Location = new Point(10, 10 + (74 * i)),
+                                Image = Image.FromFile(photo_path),
+                                SizeMode = PictureBoxSizeMode.StretchImage
+                            };
+                            Label newLabel = new Label
+                            {
+                                Text = $"{displayName}",
+                                Font = new Font("Arial", 14, FontStyle.Bold),
+                                Location = new Point(90, 13 + (74 * i)),
+                                AutoSize = true
+                            };
+                            Label newLabel2 = new Label
+                            {
+                                Text = $"{description}",
+                                Location = new Point(90, 43 + (74 * i)),
+                                Font = new Font("Arial", 8),
+                                AutoSize = true
+                            };
+                            panel.Controls.Add(newPictureBox);
+                            panel.Controls.Add(newLabel);
+                            panel.Controls.Add(newLabel2);
+                            i++;
+                        }
+                        else if (!locked && local_locked == 0)
+                        {
+                            string pathik_JSON = File.ReadAllText(pathik);
+                            JObject objIK = JObject.Parse(pathik_JSON);
+                            JArray achievements_percents = (JArray)objIK["achievementpercentages"]["achievements"];
+                            JObject statistician_pizdos = (JObject)achievements_percents.FirstOrDefault(x => (string)x["name"] == name);
+                            double displayNameFinoUgr = (double)statistician_pizdos["percent"];
+                            displayNameFinoUgr = Math.Round(displayNameFinoUgr, 2);
+                            if (displayNameFinoUgr <= 10)
+                            {
+                                // rare
+                            }
+                            //PictureBox Rare = new PictureBox
+                            //{
+                            //    Size = new Size(80, 80),
+                            //    Location = new Point(0, 10 + (74 * i)),
+                            //    Image = Image.FromFile("final.gif"),
+                            //    Padding = new Padding(0, 0, 0, 0),
+                            //    SizeMode = PictureBoxSizeMode.AutoSize
+                            //};
+
+                            PictureBox newPictureBox = new PictureBox
+                            {
+                                Size = new Size(64, 64),
+                                Location = new Point(10, 10 + (74 * i)),
+                                Image = Image.FromFile(photo_path),
+                                SizeMode = PictureBoxSizeMode.StretchImage
+                            };
+                            Label newLabel = new Label
+                            {
+                                Text = $"{displayName}",
+                                Font = new Font("Arial", 14, FontStyle.Bold),
+                                Location = new Point(90, 13 + (74 * i)),
+                                AutoSize = true
+                            };
+                            Label newLabel2 = new Label
+                            {
+                                Text = $"{description}",
+                                Location = new Point(90, 43 + (74 * i)),
+                                Font = new Font("Arial", 9),
+                                ForeColor = Color.Gray,
+                                AutoSize = true
+                            };
+                            Label percent = new Label
+                            {
+                                Text = $"{displayNameFinoUgr}% of players have this achievement",
+                                Location = new Point(90, 58 + (74 * i)),
+                                Font = new Font("Arial", 9),
+                                ForeColor = Color.Gray,
+                                AutoSize = true
+                            };
+                            panel.Controls.Add(newPictureBox);
+                            panel.Controls.Add(newLabel);
+                            panel.Controls.Add(newLabel2);
+                            panel.Controls.Add(percent);
+                            //panel.Controls.Add(Rare);
+                            i++;
+                        }
+                    }
+                    else
+                    {
+                        count_hidden++;
+                    }
+                }
+                return (i, count_hidden, unlocked_ach, locked_ach);
             }
-            else
+            catch (FileNotFoundException)
             {
                 Achievements.DownloadAchievements(appid);
-                Achievements.CreateCheme(appid);
-                json = File.ReadAllText(path);
+                Sort(appid, panel, locked, i);
+                return (0, 0, 0, 0);
             }
-            JObject obj = JObject.Parse(json);
-            JArray achievements = (JArray)obj["game"]["availableGameStats"]["achievements"];
-            int Count = achievements.Count;
-            int count_hidden = 0;
-            int unlocked_ach = 0;
-            int locked_ach = 0;
-            foreach (JObject achievement in achievements)
+            catch (Exception ex)
             {
-                int local_locked = 0;
-                //
-                string name = (string)achievement["name"];
-                string displayName = (string)achievement["displayName"];
-                string description = (string)achievement["description"];
-                int hidden = (int)achievement["hidden"];
-                //
-
-                string photo_path = "";
-
-                string local_path = Path.Combine(Settings.path, $"{appid}_achievements.txt");
-                List<string> fck_line = new List<string>(File.ReadAllLines(local_path));
-                if (fck_line.Contains(name))
-                {
-                    photo_path = Path.Combine(Settings.path, $"AchiviementsPhotos", $"{appid}_{name}_default.jpg");
-                    unlocked_ach++;
-                }
-                else
-                {
-                    photo_path = Path.Combine(Settings.path, $"AchiviementsPhotos", $"{appid}_{name}_gray.jpg");
-                    locked_ach++;
-                    local_locked = 1;
-                }
-                if (hidden == 0)
-                {
-                    if (locked && local_locked == 1)
-                    {
-                        PictureBox newPictureBox = new PictureBox
-                        {
-                            Size = new Size(64, 64),
-                            Location = new Point(10, 10 + (74 * i)),
-                            Image = Image.FromFile(photo_path),
-                            SizeMode = PictureBoxSizeMode.StretchImage
-                        };
-                        Label newLabel = new Label
-                        {
-                            Text = $"{displayName}",
-                            Font = new Font("Arial", 14, FontStyle.Bold),
-                            Location = new Point(90, 13 + (74 * i)),
-                            AutoSize = true
-                        };
-                        Label newLabel2 = new Label
-                        {
-                            Text = $"{description}",
-                            Location = new Point(90, 43 + (74 * i)),
-                            Font = new Font("Arial", 8),
-                            AutoSize = true
-                        };
-                        panel.Controls.Add(newPictureBox);
-                        panel.Controls.Add(newLabel);
-                        panel.Controls.Add(newLabel2);
-                        i++;
-                    }
-                    else if (!locked && local_locked == 0)
-                    {
-                        string pathik_JSON = File.ReadAllText(pathik);
-                        JObject objIK = JObject.Parse(pathik_JSON);
-                        JArray achievements_percents = (JArray)objIK["achievementpercentages"]["achievements"];
-                        JObject statistician_pizdos = (JObject)achievements_percents.FirstOrDefault(x => (string)x["name"] == name);
-                        double displayNameFinoUgr = (double)statistician_pizdos["percent"];
-                        displayNameFinoUgr = Math.Round(displayNameFinoUgr, 2);
-                        if (displayNameFinoUgr <= 10)
-                        {
-                            // rare
-                        }
-                        //PictureBox Rare = new PictureBox
-                        //{
-                        //    Size = new Size(80, 80),
-                        //    Location = new Point(0, 10 + (74 * i)),
-                        //    Image = Image.FromFile("final.gif"),
-                        //    Padding = new Padding(0, 0, 0, 0),
-                        //    SizeMode = PictureBoxSizeMode.AutoSize
-                        //};
-
-                        PictureBox newPictureBox = new PictureBox
-                        {
-                            Size = new Size(64, 64),
-                            Location = new Point(10, 10 + (74 * i)),
-                            Image = Image.FromFile(photo_path),
-                            SizeMode = PictureBoxSizeMode.StretchImage
-                        };
-                        Label newLabel = new Label
-                        {
-                            Text = $"{displayName}",
-                            Font = new Font("Arial", 14, FontStyle.Bold),
-                            Location = new Point(90, 13 + (74 * i)),
-                            AutoSize = true
-                        };
-                        Label newLabel2 = new Label
-                        {
-                            Text = $"{description}",
-                            Location = new Point(90, 43 + (74 * i)),
-                            Font = new Font("Arial", 9),
-                            ForeColor = Color.Gray,
-                            AutoSize = true
-                        };
-                        Label percent = new Label
-                        {
-                            Text = $"{displayNameFinoUgr}% of players have this achievement",
-                            Location = new Point(90, 58 + (74 * i)),
-                            Font = new Font("Arial", 9),
-                            ForeColor = Color.Gray,
-                            AutoSize = true
-                        };
-                        panel.Controls.Add(newPictureBox);
-                        panel.Controls.Add(newLabel);
-                        panel.Controls.Add(newLabel2);
-                        panel.Controls.Add(percent);
-                        //panel.Controls.Add(Rare);
-                        i++;
-                    }
-                }
-                else
-                {
-                    count_hidden++;
-                }
+                Settings.Exp(ex);
+                return (0, 0, 0, 0);
             }
-            return (i, count_hidden, unlocked_ach, locked_ach);
         }
 
         private void NewButton_Click(object sender, EventArgs e)

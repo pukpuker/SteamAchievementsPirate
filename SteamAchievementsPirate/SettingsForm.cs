@@ -22,6 +22,19 @@ namespace SteamAchievementsPirate
             }
             startup_checkbox.Checked = Settings.StartUP;
             start_threads_checkbox.Checked = Settings.StartThreads;
+            string ready_path = "";
+            foreach (var one in Settings.games_path)
+            {
+                if (ready_path == "")
+                {
+                    ready_path = one;
+                }
+                else
+                {
+                    ready_path = ready_path + $";{one}";
+                }
+            }
+            pathBox.Text = ready_path;
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -36,6 +49,10 @@ namespace SteamAchievementsPirate
                 {
                     Settings.UpdateValue("api_key", steamapiTextBox.Text);
                 }
+                if (!string.IsNullOrWhiteSpace(pathBox.Text))
+                {
+                    Settings.UpdateValue("games_path", pathBox.Text);
+                }
                 if (startup_checkbox.Checked != Settings.StartUP)
                 {
                     Settings.UpdateValue("startup", startup_checkbox.Checked.ToString());
@@ -48,9 +65,13 @@ namespace SteamAchievementsPirate
                 {
                     Settings.UpdateValue("language", "english");
                 }
-                else if (string.IsNullOrWhiteSpace(steamapiTextBox.Text))
+                if (string.IsNullOrWhiteSpace(steamapiTextBox.Text))
                 {
                     Settings.UpdateValue("api_key", "FREE");
+                }
+                if (string.IsNullOrWhiteSpace(pathBox.Text))
+                {
+                    Settings.UpdateValue("games_path", "C:\\Games");
                 }
                 Settings.SettingsParser();
                 MessageBox.Show("Settings have been applied!", "SAP", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -59,6 +80,11 @@ namespace SteamAchievementsPirate
             {
                 Settings.Exp(ex);
             }
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("The program supports several paths. To separate paths, add a \";\" at the end of the path.\n Paths must be in the format: disk:\\Folder (for example: C:\\Games;D:\\Games;D:\\Program\\Games)", "SAP", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
     }
 }

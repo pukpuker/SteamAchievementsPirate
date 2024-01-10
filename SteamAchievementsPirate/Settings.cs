@@ -6,7 +6,7 @@ namespace SteamAchivmentsForPirates
 {
     public static class Settings
     {
-        public static readonly string version = "0.2.0";
+        public static readonly string version = "0.2.1";
         static readonly string env_file = ".env";
         public static readonly string[] Path_Def_Games = { "C:\\Games", "D:\\Games" };
 
@@ -17,7 +17,7 @@ namespace SteamAchivmentsForPirates
         public static string api_key = "";
         public static string language = "";
         public static string path = "games\\";
-        public static string freetp_path = "";
+        public static List<string> games_path = new List<string>();
         public static bool StartUP = false;
         public static bool StartThreads = false;
         // settins from .env
@@ -73,9 +73,13 @@ namespace SteamAchivmentsForPirates
                                     {
                                         language = value;
                                     }
-                                    else if (parametr == "freetp_path")
+                                    else if (parametr == "games_path")
                                     {
-                                        freetp_path = value;
+                                        var splitted = value.Split(";");
+                                        foreach (var split in splitted)
+                                        {
+                                            games_path.Add(split);
+                                        }
                                     }
                                     else if (parametr == "startup")
                                     {

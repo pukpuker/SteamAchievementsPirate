@@ -111,12 +111,7 @@ namespace SteamAchivmentsForPirates
             if (string.IsNullOrWhiteSpace(games))
             {
                 Settings.HaveGames = Achievements.ParsingGames();
-                if (Settings.HaveGames)
-                {
-                    Settings.HaveGames = true;
-                    StartParser();
-                }
-                else
+                if (!Settings.HaveGames)
                 {
                     MessageBox.Show("The program could not detect the games. The program may not support the Steam game emulator. Try downloading another game repack (or crack) or try setting the path to the games in the settings", "SAP", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
@@ -124,6 +119,10 @@ namespace SteamAchivmentsForPirates
             else
             {
                 Settings.HaveGames = true;
+            }
+            if (Settings.StartThreads)
+            {
+                StartParser();
             }
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);

@@ -1,4 +1,5 @@
 ﻿using SteamAchivmentsForPirates;
+using System.IO;
 
 namespace SteamAchievementsPirate
 {
@@ -87,13 +88,24 @@ namespace SteamAchievementsPirate
             }
         }
 
-        public static bool Parse() // добавить возможность массив путей, т.е. несколько путей в параметрах.
+        public static bool Parse()
         {
             try
             {
-                if (!string.IsNullOrWhiteSpace(Settings.freetp_path))
+                if (Settings.games_path.Count > 0)
                 {
-                    bool sovok = ParseStage(Settings.freetp_path);
+                    bool sovok = false;
+                    foreach (var path in Settings.games_path)
+                    {
+                        if (!string.IsNullOrWhiteSpace(path))
+                        {
+                            bool ponos = ParseStage(path);
+                            if (!sovok && ponos)
+                            {
+                                sovok = true;
+                            }
+                        }
+                    }
                     return sovok;
                 }
                 else
@@ -112,17 +124,6 @@ namespace SteamAchievementsPirate
                     }
                     return sovok;
                 }
-            }
-            catch (DirectoryNotFoundException ex)
-            {
-#if DEBUG
-                Settings.Exp(ex);
-#endif
-                MessageBox.Show("U set incorrect folder. Trying to setup default path... You can change FreeTP path in .env", "SAP", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                Settings.UpdateValue("freetp_path", "");
-                MessageBox.Show("Setup to default. After reboot application, type 'parse' to parse FreeTP Games. Press Enter to Exit.", "SAP", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                Environment.Exit(0);
-                return false;
             }
             catch (Exception ex)
             {

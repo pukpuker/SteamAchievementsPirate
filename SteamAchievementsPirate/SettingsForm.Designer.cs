@@ -37,6 +37,9 @@
             comboBox2 = new ComboBox();
             steamapiTextBox = new TextBox();
             label3 = new Label();
+            pathBox = new TextBox();
+            label4 = new Label();
+            button2 = new Button();
             SuspendLayout();
             // 
             // startup_checkbox
@@ -70,7 +73,7 @@
             // 
             // button1
             // 
-            button1.Location = new Point(12, 159);
+            button1.Location = new Point(12, 178);
             button1.Name = "button1";
             button1.Size = new Size(223, 34);
             button1.TabIndex = 3;
@@ -121,11 +124,40 @@
             label3.TabIndex = 8;
             label3.Text = "Steam API: ";
             // 
+            // pathBox
+            // 
+            pathBox.Location = new Point(88, 149);
+            pathBox.Name = "pathBox";
+            pathBox.Size = new Size(147, 23);
+            pathBox.TabIndex = 9;
+            // 
+            // label4
+            // 
+            label4.AutoSize = true;
+            label4.Location = new Point(12, 152);
+            label4.Name = "label4";
+            label4.Size = new Size(50, 15);
+            label4.TabIndex = 10;
+            label4.Text = "Path(s): ";
+            // 
+            // button2
+            // 
+            button2.Location = new Point(57, 148);
+            button2.Name = "button2";
+            button2.Size = new Size(27, 23);
+            button2.TabIndex = 11;
+            button2.Text = "?";
+            button2.UseVisualStyleBackColor = true;
+            button2.Click += button2_Click;
+            // 
             // SettingsForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(247, 201);
+            ClientSize = new Size(247, 223);
+            Controls.Add(button2);
+            Controls.Add(label4);
+            Controls.Add(pathBox);
             Controls.Add(label3);
             Controls.Add(steamapiTextBox);
             Controls.Add(label2);
@@ -156,5 +188,8 @@
         private ComboBox comboBox2;
         private TextBox steamapiTextBox;
         private Label label3;
+        private TextBox pathBox;
+        private Label label4;
+        private Button button2;
     }
 }
