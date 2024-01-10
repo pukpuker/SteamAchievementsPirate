@@ -61,14 +61,13 @@ namespace SteamAchievementsPirate
         public static void Parse()
         {
             Achievements.ParsingGames();
+            MessageBox.Show("Parsing Done.", "SAP", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         public static void MyAchivment()
         {
             if (DoUWantUseIt())
             {
-                Application.EnableVisualStyles();
-                Application.SetCompatibleTextRenderingDefault(false);
                 Thread t = new Thread(() =>
                 {
                     Application.Run(new achievement_vitrina());

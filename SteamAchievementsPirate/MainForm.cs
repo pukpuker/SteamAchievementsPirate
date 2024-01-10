@@ -54,5 +54,15 @@ namespace SteamAchievementsPirate
         {
 
         }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            Actions.MyAchivment();
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            Actions.Parse();
+        }
     }
 }
