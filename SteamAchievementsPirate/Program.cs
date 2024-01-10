@@ -1,5 +1,7 @@
-﻿using SteamAchievementsPirate;
-using System.Runtime.InteropServices;
+﻿using Newtonsoft.Json.Linq;
+using SteamAchievementsPirate;
+using System.Diagnostics;
+using System.Net;
 
 namespace SteamAchivmentsForPirates
 {
@@ -8,11 +10,26 @@ namespace SteamAchivmentsForPirates
         public static List<string> games_APPIDS = new List<string>();
         public static List<string> Codex_appids = new List<string>();
         public static List<string> FreeTP_appids = new List<string>();
+
         public static Thread StartThreadsThread = new Thread(StartThreads);
 
-        [DllImport("kernel32.dll", SetLastError = true)]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        static extern bool AllocConsole();
+        public static void GetLastVersion()
+        {
+            WebClient client = new WebClient();
+            client.Headers.Set("User-Agent", "request");
+            string json = client.DownloadString("https://api.github.com/repos/pukpuker/SteamAchievementsPirate/releases/latest");
+            JObject obj = JObject.Parse(json);
+            string git_version_latest = (string)obj["tag_name"];
+            if ((git_version_latest != Settings.version) && !Settings.debug)
+            {
+                var result = MessageBox.Show("A new version of the program has been released. Do you want to upgrade?", "SAP", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+                if (result == DialogResult.Yes)
+                {
+                    MessageBox.Show(Settings.debug.ToString());
+                    Process.Start("explorer.exe", "https://github.com/pukpuker/SteamAchievementsPirate/releases/");
+                }
+            }
+        }
 
         public static string Games()
         {
@@ -73,10 +90,11 @@ namespace SteamAchivmentsForPirates
         public static void Main()
         {
 #if DEBUG
-            AllocConsole();
+            Settings.AllocConsole();
             Settings.ChangeTitle();
 #endif
             Settings.SettingsParser();
+            GetLastVersion();
             string games = Games();
             if (string.IsNullOrWhiteSpace(games))
             {

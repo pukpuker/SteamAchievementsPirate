@@ -1,5 +1,6 @@
 ﻿using SteamAchievementsPirate;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 
 namespace SteamAchivmentsForPirates
 {
@@ -11,6 +12,7 @@ namespace SteamAchivmentsForPirates
 
         public static bool HaveGames = false;
         public static bool ThreadIsStart = false;
+        public static bool debug = false;
         // settings from .env
         public static string api_key = "";
         public static string language = "";
@@ -40,6 +42,7 @@ namespace SteamAchivmentsForPirates
         {
             try
             {
+                DebugOrNo();
                 CreateDirectory();
                 if (File.Exists(env_file))
                 {
@@ -159,9 +162,18 @@ namespace SteamAchivmentsForPirates
 #endif
         }
 
+        [DllImport("kernel32.dll", SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static extern bool AllocConsole();
         public static void ChangeTitle()
         {
             Console.Title = $"SteamAchievements Debug {Settings.version}";
+        }
+
+        [Conditional("DEBUG")]
+        public static void DebugOrNo()
+        {
+            debug = true;
         }
     }
 }
