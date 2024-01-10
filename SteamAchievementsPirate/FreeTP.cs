@@ -33,7 +33,7 @@ namespace SteamAchievementsPirate
 
         public static void InfinityParserFreeTP(string appid)
         {
-            while (true)
+            while (Settings.ThreadIsStart)
             {
                 Task.Delay(1000).Wait();
                 string path_combin = Path.Combine(Settings.path, $"{appid}_info.txt");
@@ -58,72 +58,76 @@ namespace SteamAchievementsPirate
             }
         }
 
-        public static void Parse() // добавить возможность массив путей, т.е. несколько путей в параметрах.
+        public static bool ParseStage(string directory_from)
+        {
+            bool stage = false;
+            if (Directory.Exists(directory_from))
+            {
+                foreach (var directory in Directory.GetDirectories(directory_from))
+                {
+                    foreach (var directory_games in Directory.GetDirectories(directory))
+                    {
+                        if (directory_games.Contains("FreeTP"))
+                        {
+                            string appid = File.ReadAllText(Path.Combine(directory, "steam_appid.txt"));
+                            var path = Path.Combine(Settings.path, $"{appid}_info.txt");
+                            string game = Achievements.GetAppName(appid);
+                            string path_to_achivments = Path.Combine(directory_games, "Achievements");
+                            File.WriteAllText(path, $"{path_to_achivments}|{game}|FreeTP|{appid}");
+                            Achievements.CreateCheme(appid);
+                            stage = true;
+                        }
+                    }
+                }
+                return true;
+            }
+            else
+            {
+                return false; // путь не найден
+            }
+        }
+
+        public static bool Parse() // добавить возможность массив путей, т.е. несколько путей в параметрах.
         {
             try
             {
                 if (!string.IsNullOrWhiteSpace(Settings.freetp_path))
                 {
-                    foreach (var directory in Directory.GetDirectories(Settings.freetp_path))
-                    {
-                        foreach (var directory_games in Directory.GetDirectories(directory))
-                        {
-                            if (directory_games.Contains("FreeTP"))
-                            {
-                                string appid = File.ReadAllText(Path.Combine(directory, "steam_appid.txt"));
-                                var path = Path.Combine(Settings.path, $"{appid}_info.txt");
-                                string game = Achievements.GetAppName(appid);
-                                string path_to_achivments = Path.Combine(directory_games, "Achievements");
-                                File.WriteAllText(path, $"{path_to_achivments}|{game}|FreeTP|{appid}");
-                                Achievements.CreateCheme(appid);
-                            }
-                        }
-                    }
+                    bool sovok = ParseStage(Settings.freetp_path);
+                    return sovok;
                 }
                 else
                 {
-                    Console.Clear();
-                    Console.WriteLine("FreeTP Path is NULL. The search will only be performed on the paths: \"C:\\Games\" and \"D:\\Games\". Do you want to specify the search path for FreeTP games?");
-                    Console.Write("\nInput 'y' or 'n': ");
-                    string ugar = Console.ReadLine();
-                    if (ugar.Contains("y"))
+                    bool sovok = false;
+                    foreach (var one_path in Settings.Path_Def_Games)
                     {
-                        Actions.FreeTP_Path();
-                    }
-                    else
-                    {
-                        foreach (var one_path in Settings.Path_Def_Games)
+                        if (!sovok)
                         {
-                            foreach (var directory in Directory.GetDirectories(one_path))
-                            {
-                                foreach (var directory_games in Directory.GetDirectories(directory))
-                                {
-                                    if (directory_games.Contains("FreeTP"))
-                                    {
-                                        string appid = File.ReadAllText(Path.Combine(directory, "steam_appid.txt"));
-                                        var path = Path.Combine(Settings.path, $"{appid}_info.txt");
-                                        string game = Achievements.GetAppName(appid);
-                                        string path_to_achivments = Path.Combine(directory_games, "Achievements");
-                                        File.WriteAllText(path, $"{path_to_achivments}|{game}|FreeTP|{appid}");
-                                        Achievements.CreateCheme(appid);
-                                    }
-                                }
-                            }
+                            sovok = ParseStage(one_path);
+                        }
+                        else
+                        {
+                            ParseStage(one_path);
                         }
                     }
-                    Console.Clear();
+                    return sovok;
                 }
             }
             catch (DirectoryNotFoundException ex)
             {
-                Console.WriteLine("U set incorrect folder. Trying to setup default path... You can change FreeTP path in .env");
+#if DEBUG
+                Settings.Exp(ex);
+#endif
+                MessageBox.Show("U set incorrect folder. Trying to setup default path... You can change FreeTP path in .env", "SAP", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 Settings.UpdateValue("freetp_path", "");
-                Console.WriteLine("Setup to default. After reboot application, type 'parse' to parse FreeTP Games. Press Enter to Exit.");
+                MessageBox.Show("Setup to default. After reboot application, type 'parse' to parse FreeTP Games. Press Enter to Exit.", "SAP", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 Environment.Exit(0);
+                return false;
             }
             catch (Exception ex)
             {
                 Settings.Exp(ex);
+                return false;
             }
         }
     }

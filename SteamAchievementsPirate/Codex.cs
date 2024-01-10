@@ -70,9 +70,10 @@ namespace SteamAchievementsPirate
 
         public static void InfinityParserCodex(string appid)
         {
-            while (true)
+            while (Settings.ThreadIsStart)
             {
                 Task.Delay(1000).Wait();
+                MessageBox.Show("+");
                 string path_combin = Path.Combine(Settings.path, $"{appid}_info.txt");
                 string local_path = Path.Combine(Settings.path, $"{appid}_achievements.txt");
                 List<string> fck_line = new List<string>(File.ReadAllLines(local_path));
@@ -97,22 +98,40 @@ namespace SteamAchievementsPirate
             }
         }
 
-        public static void Parse()
+        public static bool Parse()
         {
-            string codex_NEW = Path.Combine(System.Environment.GetEnvironmentVariable("PUBLIC"), "Documents\\Steam\\CODEX");
-            foreach (var folder in Directory.GetDirectories(codex_NEW))
+            try
             {
-                string appid = folder.Split('\\')[6];
-                var path = Path.Combine(Settings.path, $"{appid}_info.txt");
-                foreach (var file in Directory.GetFiles(folder))
+                string codex_NEW = Path.Combine(System.Environment.GetEnvironmentVariable("PUBLIC"), "Documents\\Steam\\CODEX");
+                if (Directory.Exists(codex_NEW))
                 {
-                    if (file.Contains("achievements.ini"))
+                    bool sto_proc = false;
+                    foreach (var folder in Directory.GetDirectories(codex_NEW))
                     {
-                        string game = Achievements.GetAppName(appid);
-                        File.WriteAllText(path, $"{file}|{game}|CODEX|{appid}");
-                        Achievements.CreateCheme(appid);
+                        string appid = folder.Split('\\')[6];
+                        var path = Path.Combine(Settings.path, $"{appid}_info.txt");
+                        foreach (var file in Directory.GetFiles(folder))
+                        {
+                            if (file.Contains("achievements.ini"))
+                            {
+                                string game = Achievements.GetAppName(appid);
+                                File.WriteAllText(path, $"{file}|{game}|CODEX|{appid}");
+                                Achievements.CreateCheme(appid);
+                                sto_proc = true;
+                            }
+                        }
                     }
+                    return sto_proc;
                 }
+                else
+                {
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                Settings.Exp(ex);
+                return false;
             }
         }
     }

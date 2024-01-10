@@ -53,48 +53,70 @@ namespace SteamAchivmentsForPirates
                 var thread_InfinityParser = new Thread(() => FreeTP.InfinityParserFreeTP(app_id));
                 thread_InfinityParser.Start();
             }
+            Settings.ThreadIsStart = true;
         }
 
-        public static void ConsoleStart(string games)
-        {
-            Console.Clear();
-            Console.Write($"Actions: \n[parse] - parse games in PC\n[freetp_path] - update freetp.org games folder\n[achiv] - check ur achievements\n\nGames:\n{games}\nInput: ");
-            string? action = Console.ReadLine();
-            if (action == "parse")
-            {
-                Actions.Parse();
-                ConsoleStart(games);
-            }
-            else if (action == "freetp_path")
-            {
-                Actions.FreeTP_Path();
-                ConsoleStart(games);
-            }
-            else if (action == "achiv")
-            {
-                Actions.MyAchivment();
-                ConsoleStart(games);
-            }
-            else
-            {
-                ConsoleStart(games);
-            }
-        }
+        //public static void ConsoleStart(string games)
+        //{
+        //    Console.Clear();
+        //    Console.Write($"Actions: \n[parse] - parse games in PC\n[freetp_path] - update freetp.org games folder\n[achiv] - check ur achievements\n\nGames:\n{games}\nInput: ");
+        //    string? action = Console.ReadLine();
+        //    if (action == "parse")
+        //    {
+        //        Actions.Parse();
+        //        ConsoleStart(games);
+        //    }
+        //    else if (action == "freetp_path")
+        //    {
+        //        Actions.FreeTP_Path();
+        //        ConsoleStart(games);
+        //    }
+        //    else if (action == "achiv")
+        //    {
+        //        Actions.MyAchivment();
+        //        ConsoleStart(games);
+        //    }
+        //    else
+        //    {
+        //        ConsoleStart(games);
+        //    }
+        //}
 
         public static void Main()
         {
-            Settings.ChangeTitle();
+            //Settings.ChangeTitle();
             Settings.SettingsParser();
             string games = Games();
             if (string.IsNullOrWhiteSpace(games))
             {
-                Achievements.ParsingGames();
-                Main();
+                Settings.HaveGames = Achievements.ParsingGames();
+                if (Settings.HaveGames)
+                {
+                    Settings.HaveGames = true;
+                    Main();
+                }
+                else
+                {
+                    MessageBox.Show("The program could not detect the games. The program may not support the Steam game emulator. Try downloading another game repack (or crack) or try setting the path to the games in the settings", "SAP", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
             }
-            Thread Start = new Thread(StartThreads);
-            Start.Start();
-            ConsoleStart(games);
-            //Achivments.ShowAchivment("641990", "OpenPrison");
+            else
+            {
+                Settings.HaveGames = true;
+            }
+            if (Settings.StartThreads && Settings.HaveGames)
+            {
+                Thread Start = new Thread(StartThreads);
+                Start.Start();
+            }
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
+            Thread t = new Thread(() =>
+            {
+                Application.Run(new MainForm());
+            });
+            t.Start();
+            //ConsoleStart(games);
         }
     }
 }

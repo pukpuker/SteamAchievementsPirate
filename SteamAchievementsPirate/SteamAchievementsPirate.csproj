@@ -11,7 +11,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="bin\Debug\net8.0-windows\desktop_toast_default.wav" />
+    <None Remove="Resource\desktop_toast_default.wav" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Resource\desktop_toast_default.wav" />
   </ItemGroup>
 
   <ItemGroup>

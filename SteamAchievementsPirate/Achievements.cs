@@ -121,10 +121,18 @@ namespace SteamAchivmentsForPirates
             }
         }
 
-        public static void ParsingGames()
+        public static bool ParsingGames()
         {
-            Codex.Parse();
-            FreeTP.Parse();
+            bool codex = Codex.Parse();
+            bool freetp = FreeTP.Parse();
+            if ((codex && freetp) == false)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
         }
     }
 }
