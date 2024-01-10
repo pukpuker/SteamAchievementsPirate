@@ -62,32 +62,6 @@ namespace SteamAchivmentsForPirates
             Settings.StartThreads = true;
         }
 
-        //public static void ConsoleStart(string games)
-        //{
-        //    Console.Clear();
-        //    Console.Write($"Actions: \n[parse] - parse games in PC\n[freetp_path] - update freetp.org games folder\n[achiv] - check ur achievements\n\nGames:\n{games}\nInput: ");
-        //    string? action = Console.ReadLine();
-        //    if (action == "parse")
-        //    {
-        //        Actions.Parse();
-        //        ConsoleStart(games);
-        //    }
-        //    else if (action == "freetp_path")
-        //    {
-        //        Actions.FreeTP_Path();
-        //        ConsoleStart(games);
-        //    }
-        //    else if (action == "achiv")
-        //    {
-        //        Actions.MyAchivment();
-        //        ConsoleStart(games);
-        //    }
-        //    else
-        //    {
-        //        ConsoleStart(games);
-        //    }
-        //}
-
         public static void StartParser()
         {
             if (Settings.StartThreads && Settings.HaveGames)
@@ -128,7 +102,6 @@ namespace SteamAchivmentsForPirates
                 Application.Run(new MainForm());
             });
             t.Start();
-            //ConsoleStart(games);
         }
     }
 }

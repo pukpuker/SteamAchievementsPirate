@@ -51,13 +51,6 @@ namespace SteamAchievementsPirate
         }
 
         //actions
-        public static void FreeTP_Path()
-        {
-            Console.Write("\nEnter FreeTP Folder: ");
-            string? path = Console.ReadLine();
-            Settings.UpdateValue("freetp_path", path);
-            SX.Main();
-        }
         public static void Parse()
         {
             Achievements.ParsingGames();
