@@ -2,9 +2,9 @@
 
 namespace SteamAchievementsPirate
 {
-    public static class Codex
+    public static class Rune
     {
-        public static (int, List<string>) GetCountCodex(string path)
+        public static (int, List<string>) GetCountRune(string path)
         {
             try
             {
@@ -58,12 +58,12 @@ namespace SteamAchievementsPirate
         public static void FirstStart(string appid)
         {
             string path_combin = Path.Combine(Settings.path, $"{appid}_info.txt");
-            var CounterDristos = GetCountCodex(File.ReadAllText(path_combin).Split('|')[0]);
+            var CounterDristos = GetCountRune(File.ReadAllText(path_combin).Split('|')[0]);
             string local_path = Path.Combine(Settings.path, $"{appid}_achievements.txt");
             File.WriteAllText(local_path, string.Join("\r\n", CounterDristos.Item2));
         }
 
-        public static void InfinityParserCodex(string appid)
+        public static void InfinityParserRune(string appid)
         {
             while (Settings.ThreadIsStart)
             {
@@ -71,7 +71,7 @@ namespace SteamAchievementsPirate
                 string path_combin = Path.Combine(Settings.path, $"{appid}_info.txt");
                 string local_path = Path.Combine(Settings.path, $"{appid}_achievements.txt");
                 List<string> fck_line = new List<string>(File.ReadAllLines(local_path));
-                var CounterDristos = GetCountCodex(File.ReadAllText(path_combin).Split('|')[0]);
+                var CounterDristos = GetCountRune(File.ReadAllText(path_combin).Split('|')[0]);
                 foreach (var one_achivment in CounterDristos.Item2)
                 {
                     if (!fck_line.Contains(one_achivment))
@@ -96,11 +96,11 @@ namespace SteamAchievementsPirate
         {
             try
             {
-                string codex_NEW = Path.Combine(System.Environment.GetEnvironmentVariable("PUBLIC"), "Documents\\Steam\\CODEX");
-                if (Directory.Exists(codex_NEW))
+                string rune = Path.Combine(System.Environment.GetEnvironmentVariable("PUBLIC"), "Documents\\Steam\\RUNE");
+                if (Directory.Exists(rune))
                 {
                     bool sto_proc = false;
-                    foreach (var folder in Directory.GetDirectories(codex_NEW))
+                    foreach (var folder in Directory.GetDirectories(rune))
                     {
                         string appid = folder.Split('\\')[6];
                         var path = Path.Combine(Settings.path, $"{appid}_info.txt");
@@ -109,7 +109,7 @@ namespace SteamAchievementsPirate
                             if (file.Contains("achievements.ini"))
                             {
                                 string game = Achievements.GetAppName(appid);
-                                File.WriteAllText(path, $"{file}|{game}|CODEX|{appid}|{Settings.language}");
+                                File.WriteAllText(path, $"{file}|{game}|RUNE|{appid}|{Settings.language}");
                                 Achievements.CreateCheme(appid);
                                 sto_proc = true;
                             }

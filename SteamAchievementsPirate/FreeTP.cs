@@ -73,7 +73,7 @@ namespace SteamAchievementsPirate
                             var path = Path.Combine(Settings.path, $"{appid}_info.txt");
                             string game = Achievements.GetAppName(appid);
                             string path_to_achivments = Path.Combine(directory_games, "Achievements");
-                            File.WriteAllText(path, $"{path_to_achivments}|{game}|FreeTP|{appid}");
+                            File.WriteAllText(path, $"{path_to_achivments}|{game}|FreeTP|{appid}|{Settings.language}");
                             Achievements.CreateCheme(appid);
                             stage = true;
                         }

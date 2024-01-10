@@ -122,8 +122,9 @@ namespace SteamAchivmentsForPirates
         public static bool ParsingGames()
         {
             bool codex = Codex.Parse();
+            bool rune = Rune.Parse();
             bool freetp = FreeTP.Parse();
-            if ((codex && freetp) == false)
+            if ((codex && freetp && rune) == false)
             {
                 return false;
             }

@@ -9,6 +9,7 @@ namespace SteamAchivmentsForPirates
     {
         public static List<string> games_APPIDS = new List<string>();
         public static List<string> Codex_appids = new List<string>();
+        public static List<string> Rune_appids = new List<string>();
         public static List<string> FreeTP_appids = new List<string>();
 
         public static Thread StartThreadsThread = new Thread(StartThreads);
@@ -51,6 +52,10 @@ namespace SteamAchivmentsForPirates
                     {
                         Codex_appids.Add(app_id);
                     }
+                    else if (emu == "RUNE")
+                    {
+                        Rune_appids.Add(app_id);
+                    }
                     else if (emu == "FreeTP")
                     {
                         FreeTP_appids.Add(app_id);
@@ -67,6 +72,13 @@ namespace SteamAchivmentsForPirates
                 Codex.FirstStart(app_id);
                 Task.Delay(300).Wait();
                 var thread_InfinityParser = new Thread(() => Codex.InfinityParserCodex(app_id));
+                thread_InfinityParser.Start();
+            }
+            foreach (var app_id in Rune_appids)
+            {
+                Codex.FirstStart(app_id);
+                Task.Delay(300).Wait();
+                var thread_InfinityParser = new Thread(() => Rune.InfinityParserRune(app_id));
                 thread_InfinityParser.Start();
             }
             foreach (var app_id in FreeTP_appids)

@@ -25,17 +25,29 @@ namespace SteamAchievementsPirate
 
         private void GameList_Load(object sender, EventArgs e)
         {
-            foreach (var file in Directory.GetFiles($"{Settings.path}"))
+            try
             {
-                if (file.Contains("info"))
+                foreach (var file in Directory.GetFiles($"{Settings.path}"))
                 {
-                    string[] all_massive_file = File.ReadAllText(file).Split('|');
-                    string path = all_massive_file[0];
-                    string appname = all_massive_file[1];
-                    string emulator = all_massive_file[2];
-                    string appid = all_massive_file[3];
-                    dataGridView1.Rows.Add(appid, appname, emulator, path);
+                    if (file.Contains("info"))
+                    {
+                        string[] all_massive_file = File.ReadAllText(file).Split('|');
+                        string path = all_massive_file[0];
+                        string appname = all_massive_file[1];
+                        string emulator = all_massive_file[2];
+                        string appid = all_massive_file[3];
+                        string language = all_massive_file[4];
+                        dataGridView1.Rows.Add(appid, appname, emulator, path, language);
+                    }
                 }
+            }
+            catch (IndexOutOfRangeException)
+            {
+                MessageBox.Show("An error has occurred. There are not enough arguments. Try clicking the \"Parse\" button in the main menu. If this does not help, then try deleting the “games” folder in the program folder.", "SAP", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            catch (Exception ex)
+            {
+                Settings.Exp(ex);
             }
         }
     }
