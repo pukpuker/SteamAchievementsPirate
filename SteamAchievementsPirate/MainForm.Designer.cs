@@ -91,7 +91,7 @@
             button5.Name = "button5";
             button5.Size = new Size(83, 23);
             button5.TabIndex = 6;
-            button5.Text = "Parse";
+            button5.Text = "Parse Games";
             button5.UseVisualStyleBackColor = true;
             button5.Click += button5_Click;
             // 

@@ -1,4 +1,5 @@
 ﻿using SteamAchievementsPirate;
+using System.Runtime.InteropServices;
 
 namespace SteamAchivmentsForPirates
 {
@@ -7,6 +8,11 @@ namespace SteamAchivmentsForPirates
         public static List<string> games_APPIDS = new List<string>();
         public static List<string> Codex_appids = new List<string>();
         public static List<string> FreeTP_appids = new List<string>();
+        public static Thread StartThreadsThread = new Thread(StartThreads);
+
+        [DllImport("kernel32.dll", SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        static extern bool AllocConsole();
 
         public static string Games()
         {
@@ -53,7 +59,7 @@ namespace SteamAchivmentsForPirates
                 var thread_InfinityParser = new Thread(() => FreeTP.InfinityParserFreeTP(app_id));
                 thread_InfinityParser.Start();
             }
-            Settings.ThreadIsStart = true;
+            Settings.StartThreads = true;
         }
 
         //public static void ConsoleStart(string games)
@@ -82,9 +88,20 @@ namespace SteamAchivmentsForPirates
         //    }
         //}
 
+        public static void StartParser()
+        {
+            if (Settings.StartThreads && Settings.HaveGames)
+            {
+                StartThreadsThread.Start();
+            }
+        }
+
         public static void Main()
         {
-            //Settings.ChangeTitle();
+#if DEBUG
+            AllocConsole();
+            Settings.ChangeTitle();
+#endif
             Settings.SettingsParser();
             string games = Games();
             if (string.IsNullOrWhiteSpace(games))
@@ -93,7 +110,7 @@ namespace SteamAchivmentsForPirates
                 if (Settings.HaveGames)
                 {
                     Settings.HaveGames = true;
-                    Main();
+                    StartParser();
                 }
                 else
                 {
@@ -103,11 +120,6 @@ namespace SteamAchivmentsForPirates
             else
             {
                 Settings.HaveGames = true;
-            }
-            if (Settings.StartThreads && Settings.HaveGames)
-            {
-                Thread Start = new Thread(StartThreads);
-                Start.Start();
             }
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
