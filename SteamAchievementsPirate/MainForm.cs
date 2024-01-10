@@ -112,5 +112,11 @@ namespace SteamAchievementsPirate
                 MessageBox.Show("Stop the parser first before parsing the games", "SAP", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            GameList formka = new GameList();
+            formka.Show();
+        }
     }
 }
