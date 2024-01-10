@@ -6,7 +6,7 @@ namespace SteamAchivmentsForPirates
 {
     public static class Settings
     {
-        public static readonly string version = "0.2.1";
+        public static readonly string version = "0.2.2";
         static readonly string env_file = ".env";
         public static readonly string[] Path_Def_Games = { "C:\\Games", "D:\\Games" };
 
@@ -158,10 +158,8 @@ namespace SteamAchivmentsForPirates
         {
 #if DEBUG
             MessageBox.Show(ex.ToString());
-            Console.ReadKey();
 #elif READYTORELEASE
             MessageBox.Show(ex.Message);
-            Task.Delay(10000).Wait();
             Environment.Exit(1488);
 #endif
         }

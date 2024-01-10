@@ -40,6 +40,8 @@
             pathBox = new TextBox();
             label4 = new Label();
             button2 = new Button();
+            button3 = new Button();
+            button4 = new Button();
             SuspendLayout();
             // 
             // startup_checkbox
@@ -142,7 +144,7 @@
             // 
             // button2
             // 
-            button2.Location = new Point(57, 148);
+            button2.Location = new Point(241, 149);
             button2.Name = "button2";
             button2.Size = new Size(27, 23);
             button2.TabIndex = 11;
@@ -150,11 +152,33 @@
             button2.UseVisualStyleBackColor = true;
             button2.Click += button2_Click;
             // 
+            // button3
+            // 
+            button3.Location = new Point(241, 120);
+            button3.Name = "button3";
+            button3.Size = new Size(27, 23);
+            button3.TabIndex = 12;
+            button3.Text = "?";
+            button3.UseVisualStyleBackColor = true;
+            button3.Click += button3_Click;
+            // 
+            // button4
+            // 
+            button4.Location = new Point(241, 62);
+            button4.Name = "button4";
+            button4.Size = new Size(27, 23);
+            button4.TabIndex = 13;
+            button4.Text = "?";
+            button4.UseVisualStyleBackColor = true;
+            button4.Click += button4_Click;
+            // 
             // SettingsForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(247, 223);
+            ClientSize = new Size(272, 223);
+            Controls.Add(button4);
+            Controls.Add(button3);
             Controls.Add(button2);
             Controls.Add(label4);
             Controls.Add(pathBox);
@@ -191,5 +215,7 @@
         private TextBox pathBox;
         private Label label4;
         private Button button2;
+        private Button button3;
+        private Button button4;
     }
 }

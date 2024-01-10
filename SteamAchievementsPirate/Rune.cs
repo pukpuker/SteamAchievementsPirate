@@ -109,8 +109,8 @@ namespace SteamAchievementsPirate
                             if (file.Contains("achievements.ini"))
                             {
                                 string game = Achievements.GetAppName(appid);
-                                File.WriteAllText(path, $"{file}|{game}|RUNE|{appid}|{Settings.language}");
                                 Achievements.CreateCheme(appid);
+                                File.WriteAllText(path, $"{file}|{game}|RUNE|{appid}|{Settings.language}");
                                 sto_proc = true;
                             }
                         }

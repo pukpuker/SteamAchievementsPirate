@@ -72,9 +72,8 @@ namespace SteamAchivmentsForPirates
             }
             catch (WebException)
             {
-                Console.WriteLine("403 From API Steam. Most likely incorrect SteamAPI Key (If u wanna change API_KEY, edit .env throw text editors). Exit.");
-                Console.ReadKey();
-                Environment.Exit(1);
+                MessageBox.Show("403 From API Steam. Most likely incorrect SteamAPI Key (If u wanna change API_KEY, edit .env throw text editors or delete .env file, but ur another settings has been removed too). Exit.", "SAP", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Environment.Exit(403);
                 return null;
             }
         }
@@ -86,6 +85,15 @@ namespace SteamAchivmentsForPirates
             {
                 string json = ugar.DownloadString($"https://api.steampowered.com/ISteamUserStats/GetSchemaForGame/v2?appid={appid}&key={Settings.api_key}&l={Settings.language}");
                 File.WriteAllText(path, json);
+            }
+            else
+            {
+                string language_from_file = File.ReadAllText(Path.Combine(Settings.path, $"{appid}_info.txt")).Split('|')[4];
+                if (language_from_file != Settings.language)
+                {
+                    string json = ugar.DownloadString($"https://api.steampowered.com/ISteamUserStats/GetSchemaForGame/v2?appid={appid}&key={Settings.api_key}&l={Settings.language}");
+                    File.WriteAllText(path, json);
+                }
             }
             string percenet_file = $"{Settings.path}\\{appid}_percents.txt";
             if (!File.Exists(percenet_file))
@@ -124,13 +132,13 @@ namespace SteamAchivmentsForPirates
             bool codex = Codex.Parse();
             bool rune = Rune.Parse();
             bool freetp = FreeTP.Parse();
-            if ((codex && freetp && rune) == false)
+            if ((codex || freetp || rune) == true)
             {
-                return false;
+                return true;
             }
             else
             {
-                return true;
+                return false;
             }
         }
     }

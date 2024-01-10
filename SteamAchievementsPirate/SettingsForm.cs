@@ -1,4 +1,5 @@
 ﻿using SteamAchivmentsForPirates;
+using System.Diagnostics;
 
 namespace SteamAchievementsPirate
 {
@@ -85,6 +86,20 @@ namespace SteamAchievementsPirate
         private void button2_Click(object sender, EventArgs e)
         {
             MessageBox.Show("The program supports several paths. To separate paths, add a \";\" at the end of the path.\n Paths must be in the format: disk:\\Folder (for example: C:\\Games;D:\\Games;D:\\Program\\Games)", "SAP", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            DialogResult button = MessageBox.Show("You can leave this parameter empty, since the program can enter the API KEY, but perhaps the free API key may break and in case there are errors from Steam (403), then put your key. It can be done on the website: https://steamcommunity.com/dev/apikey.\nDo you want to go to the website for obtaining a Steam API key? (You will need a Nolimit account)", "SAP", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+            if (button == DialogResult.Yes)
+            {
+                Process.Start("explorer.exe", "https://steamcommunity.com/dev/apikey");
+            }
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("This is not the language of the program, it is the language of achievements. If the game supports the selected language, then the achievements will be in the selected language, but if the game does not support this language, then English will be used by default. If you want to change the language, then just change it here, save the settings and restart the program.", "SAP", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
         }
     }
 }

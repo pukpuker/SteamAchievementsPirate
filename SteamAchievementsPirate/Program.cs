@@ -28,6 +28,7 @@ namespace SteamAchivmentsForPirates
                 {
                     MessageBox.Show(Settings.debug.ToString());
                     Process.Start("explorer.exe", "https://github.com/pukpuker/SteamAchievementsPirate/releases/");
+                    Environment.Exit(0);
                 }
             }
         }
@@ -107,6 +108,7 @@ namespace SteamAchivmentsForPirates
 #endif
             Settings.SettingsParser();
             GetLastVersion();
+            Achievements.ParsingGames();
             string games = Games();
             if (string.IsNullOrWhiteSpace(games))
             {
