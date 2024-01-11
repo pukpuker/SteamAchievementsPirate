@@ -7,7 +7,7 @@ namespace SteamAchivmentsForPirates
 {
     public static class Settings
     {
-        public static readonly string version = "0.2.3";
+        public static readonly string version = "0.2.4";
         static readonly string env_file = ".env";
         public static string path = "games\\";
         public static readonly string[] Path_Def_Games = { "C:\\Games", "D:\\Games" };
@@ -35,8 +35,6 @@ namespace SteamAchivmentsForPirates
         public static void SetUp()
         {
             MessageBox.Show("You have launched the application for the first time. To configure the .env file click 'OK'.\n!!! After you clicked the save button, close the settings form and the program will open. !!!", "SAP", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new SettingsForm());
             SX.Main();
         }
@@ -163,7 +161,7 @@ namespace SteamAchivmentsForPirates
         public static bool SetAutorunValue(bool autorun)
         {
             string executablePath = Application.ExecutablePath;
-            var nameApp = "AutoLoadSample";
+            var nameApp = "SAP";
             RegistryKey reg;
             reg = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
             if (autorun)
