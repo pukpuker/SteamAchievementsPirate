@@ -129,6 +129,7 @@ public class OverlaySteamNewForm : Form
         else
         {
             timerHide.Stop();
+            this.Close();
         }
     }
 }

@@ -134,7 +134,7 @@ public class OverlayForm : Form
         else
         {
             timerHide.Stop();
-            Application.Exit();
+            this.Close();
         }
     }
 }
