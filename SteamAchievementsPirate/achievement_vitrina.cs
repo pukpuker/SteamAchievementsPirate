@@ -62,17 +62,24 @@ namespace SteamAchievementsPirate
                     string photo_path = "";
 
                     string local_path = Path.Combine(Settings.path, $"{appid}_achievements.txt");
-                    List<string> fck_line = new List<string>(File.ReadAllLines(local_path));
-                    if (fck_line.Contains(name))
+                    if (File.Exists(local_path))
                     {
-                        photo_path = Path.Combine(Settings.path, $"AchiviementsPhotos", $"{appid}_{name}_default.jpg");
-                        unlocked_ach++;
+                        List<string> fck_line = new List<string>(File.ReadAllLines(local_path));
+                        if (fck_line.Contains(name))
+                        {
+                            photo_path = Path.Combine(Settings.path, $"AchiviementsPhotos", $"{appid}_{name}_default.jpg");
+                            unlocked_ach++;
+                        }
+                        else
+                        {
+                            photo_path = Path.Combine(Settings.path, $"AchiviementsPhotos", $"{appid}_{name}_gray.jpg");
+                            locked_ach++;
+                            local_locked = 1;
+                        }
                     }
                     else
                     {
                         photo_path = Path.Combine(Settings.path, $"AchiviementsPhotos", $"{appid}_{name}_gray.jpg");
-                        locked_ach++;
-                        local_locked = 1;
                     }
                     if (hidden == 0)
                     {
@@ -170,8 +177,9 @@ namespace SteamAchievementsPirate
                 }
                 return (i, count_hidden, unlocked_ach, locked_ach);
             }
-            catch (FileNotFoundException)
+            catch (FileNotFoundException ex)
             {
+                MessageBox.Show(ex.ToString());
                 Achievements.DownloadAchievements(appid);
                 Sort(appid, panel, locked, i);
                 return (0, 0, 0, 0);
