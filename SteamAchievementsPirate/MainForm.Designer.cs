@@ -35,12 +35,13 @@
             button4 = new Button();
             button5 = new Button();
             button6 = new Button();
+            button7 = new Button();
             SuspendLayout();
             // 
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(12, 9);
+            label1.Location = new Point(12, 12);
             label1.Name = "label1";
             label1.Size = new Size(38, 15);
             label1.TabIndex = 0;
@@ -70,7 +71,7 @@
             // 
             button3.Location = new Point(297, 12);
             button3.Name = "button3";
-            button3.Size = new Size(83, 23);
+            button3.Size = new Size(100, 23);
             button3.TabIndex = 4;
             button3.Text = "Hide in Tray";
             button3.UseVisualStyleBackColor = true;
@@ -90,7 +91,7 @@
             // 
             button5.Location = new Point(297, 41);
             button5.Name = "button5";
-            button5.Size = new Size(83, 23);
+            button5.Size = new Size(100, 23);
             button5.TabIndex = 6;
             button5.Text = "Parse Games";
             button5.UseVisualStyleBackColor = true;
@@ -98,19 +99,30 @@
             // 
             // button6
             // 
-            button6.Location = new Point(297, 70);
+            button6.Location = new Point(297, 99);
             button6.Name = "button6";
-            button6.Size = new Size(83, 52);
+            button6.Size = new Size(100, 23);
             button6.TabIndex = 7;
             button6.Text = "Open Game List";
             button6.UseVisualStyleBackColor = true;
             button6.Click += button6_Click;
             // 
+            // button7
+            // 
+            button7.Location = new Point(297, 70);
+            button7.Name = "button7";
+            button7.Size = new Size(100, 23);
+            button7.TabIndex = 8;
+            button7.Text = "Test Achiev";
+            button7.UseVisualStyleBackColor = true;
+            button7.Click += button7_Click;
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(389, 132);
+            ClientSize = new Size(401, 132);
+            Controls.Add(button7);
             Controls.Add(button6);
             Controls.Add(button5);
             Controls.Add(button4);
@@ -137,5 +149,6 @@
         private Button button4;
         private Button button5;
         private Button button6;
+        private Button button7;
     }
 }

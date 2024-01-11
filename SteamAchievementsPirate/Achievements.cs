@@ -11,13 +11,22 @@ namespace SteamAchivmentsForPirates
 
         public static void StartAchivment(string name, string description, string url)
         {
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            Thread t = new Thread(() =>
+            if (Settings.notif_style == "steamold")
             {
-                Application.Run(new OverlayForm(name, description, url));
-            });
-            t.Start();
+                Thread t = new Thread(() =>
+                {
+                    Application.Run(new OverlayForm(name, description, url));
+                });
+                t.Start();
+            }   
+            else 
+            {
+                Thread t = new Thread(() =>
+                {
+                    Application.Run(new OverlaySteamNewForm(name, description, url));
+                });
+                t.Start();
+            }
         }
         public static bool DownloadAchievements(string appid)
         {
@@ -101,6 +110,12 @@ namespace SteamAchivmentsForPirates
                 string json = ugar.DownloadString($"https://api.steampowered.com/ISteamUserStats/GetGlobalAchievementPercentagesForApp/v0002/?gameid={appid}&format=json");
                 File.WriteAllText(percenet_file, json);
             }
+        }
+
+        public static void ShowTestAchivment()
+        {
+            string icon = "https://steamcdn-a.akamaihd.net/steamcommunity/public/images/apps/480/winner.jpg";
+            StartAchivment("Winner", "Win one game.", icon);
         }
 
         public static void ShowAchivment(string appid, string achivka)

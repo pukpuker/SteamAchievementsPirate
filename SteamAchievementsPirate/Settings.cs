@@ -8,6 +8,7 @@ namespace SteamAchivmentsForPirates
     {
         public static readonly string version = "0.2.3";
         static readonly string env_file = ".env";
+        public static string path = "games\\";
         public static readonly string[] Path_Def_Games = { "C:\\Games", "D:\\Games" };
 
         public static bool HaveGames = false;
@@ -16,7 +17,6 @@ namespace SteamAchivmentsForPirates
         // settings from .env
         public static string api_key = "";
         public static string language = "";
-        public static string path = "games\\";
         public static List<string> games_path = new List<string>();
         public static bool StartUP = false;
         public static bool StartThreads = false;

@@ -118,5 +118,10 @@ namespace SteamAchievementsPirate
             GameList formka = new GameList();
             formka.Show();
         }
+
+        private void button7_Click(object sender, EventArgs e)
+        {
+            Achievements.ShowTestAchivment();
+        }
     }
 }

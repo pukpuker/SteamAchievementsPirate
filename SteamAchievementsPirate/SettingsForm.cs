@@ -128,7 +128,7 @@ namespace SteamAchievementsPirate
 
         private void button4_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("This is not the language of the program, it is the language of achievements. If the game supports the selected language, then the achievements will be in the selected language, but if the game does not support this language, then English will be used by default. If you want to change the language, then just change it here, save the settings and restart the program.", "SAP", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+            MessageBox.Show("This is not the language of the program, it is the language of achievements. If the game supports the selected language, then the achievements will be in the selected language, but if the game does not support this language, then English will be used by default. If you want to change the language, then just change it here, save the settings and restart the program.", "SAP", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private void button5_Click(object sender, EventArgs e)
