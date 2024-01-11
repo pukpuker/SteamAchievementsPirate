@@ -42,6 +42,9 @@
             button2 = new Button();
             button3 = new Button();
             button4 = new Button();
+            label5 = new Label();
+            NotifStyleComboBox = new ComboBox();
+            button5 = new Button();
             SuspendLayout();
             // 
             // startup_checkbox
@@ -75,9 +78,9 @@
             // 
             // button1
             // 
-            button1.Location = new Point(12, 178);
+            button1.Location = new Point(12, 209);
             button1.Name = "button1";
-            button1.Size = new Size(223, 34);
+            button1.Size = new Size(256, 34);
             button1.TabIndex = 3;
             button1.Text = "Save";
             button1.UseVisualStyleBackColor = true;
@@ -172,11 +175,42 @@
             button4.UseVisualStyleBackColor = true;
             button4.Click += button4_Click;
             // 
+            // label5
+            // 
+            label5.AutoSize = true;
+            label5.Location = new Point(12, 181);
+            label5.Name = "label5";
+            label5.Size = new Size(68, 15);
+            label5.TabIndex = 15;
+            label5.Text = "Notif Style: ";
+            // 
+            // NotifStyleComboBox
+            // 
+            NotifStyleComboBox.FormattingEnabled = true;
+            NotifStyleComboBox.Items.AddRange(new object[] { "Steam New", "Steam Old" });
+            NotifStyleComboBox.Location = new Point(88, 178);
+            NotifStyleComboBox.Name = "NotifStyleComboBox";
+            NotifStyleComboBox.Size = new Size(147, 23);
+            NotifStyleComboBox.TabIndex = 14;
+            // 
+            // button5
+            // 
+            button5.Location = new Point(241, 178);
+            button5.Name = "button5";
+            button5.Size = new Size(27, 23);
+            button5.TabIndex = 16;
+            button5.Text = "?";
+            button5.UseVisualStyleBackColor = true;
+            button5.Click += button5_Click;
+            // 
             // SettingsForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(272, 223);
+            ClientSize = new Size(282, 255);
+            Controls.Add(button5);
+            Controls.Add(label5);
+            Controls.Add(NotifStyleComboBox);
             Controls.Add(button4);
             Controls.Add(button3);
             Controls.Add(button2);
@@ -217,5 +251,8 @@
         private Button button2;
         private Button button3;
         private Button button4;
+        private Label label5;
+        private ComboBox NotifStyleComboBox;
+        private Button button5;
     }
 }

@@ -6,7 +6,7 @@ namespace SteamAchivmentsForPirates
 {
     public static class Settings
     {
-        public static readonly string version = "0.2.2";
+        public static readonly string version = "0.2.3";
         static readonly string env_file = ".env";
         public static readonly string[] Path_Def_Games = { "C:\\Games", "D:\\Games" };
 
@@ -20,6 +20,7 @@ namespace SteamAchivmentsForPirates
         public static List<string> games_path = new List<string>();
         public static bool StartUP = false;
         public static bool StartThreads = false;
+        public static string notif_style = "";
         // settins from .env
 
         public static void CreateDirectory()
@@ -32,10 +33,11 @@ namespace SteamAchivmentsForPirates
 
         public static void SetUp()
         {
-            MessageBox.Show("You have launched the application for the first time. To configure the .env file click 'OK'.\n!!! After saving the settings, restart the application. !!!", "SAP", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show("You have launched the application for the first time. To configure the .env file click 'OK'.\n!!! After you clicked the save button, close the settings form and the program will open. !!!", "SAP", MessageBoxButtons.OK, MessageBoxIcon.Information);
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new SettingsForm());
+            SX.Main();
         }
 
         public static void SettingsParser()
@@ -88,6 +90,10 @@ namespace SteamAchivmentsForPirates
                                     else if (parametr == "start_threads")
                                     {
                                         StartThreads = bool.Parse(value);
+                                    }
+                                    else if (parametr == "notif_style")
+                                    {
+                                        notif_style = value;
                                     }
                                 }
                                 else
