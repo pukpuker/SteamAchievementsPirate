@@ -1,4 +1,5 @@
-﻿using SteamAchievementsPirate;
+﻿using Microsoft.Win32;
+using SteamAchievementsPirate;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 
@@ -157,6 +158,35 @@ namespace SteamAchivmentsForPirates
             catch (Exception ex)
             {
                 Settings.Exp(ex);
+            }
+        }
+        public static bool SetAutorunValue(bool autorun)
+        {
+            string executablePath = Application.ExecutablePath;
+            var nameApp = "AutoLoadSample";
+            RegistryKey reg;
+            reg = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
+            if (autorun)
+            {
+                if (reg.GetValue(nameApp) == null)
+                {
+                    reg.SetValue(nameApp, executablePath);
+                    reg.Close();
+                    return true;
+                }
+                else
+                    return false;
+            }
+            else
+            {
+                if (reg.GetValue(nameApp) != null)
+                {
+                    reg.DeleteValue(nameApp);
+                    reg.Close();
+                    return true;
+                }
+                else
+                    return false;
             }
         }
 

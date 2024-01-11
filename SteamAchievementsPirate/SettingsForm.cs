@@ -81,6 +81,7 @@ namespace SteamAchievementsPirate
                 }
                 if (startup_checkbox.Checked != Settings.StartUP)
                 {
+                    Settings.SetAutorunValue(startup_checkbox.Checked);
                     Settings.UpdateValue("startup", startup_checkbox.Checked.ToString());
                 }
                 if (start_threads_checkbox.Checked != Settings.StartThreads)
@@ -134,6 +135,11 @@ namespace SteamAchievementsPirate
         private void button5_Click(object sender, EventArgs e)
         {
             MessageBox.Show("Choose your achievement notification style.", "SAP", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        private void startup_checkbox_CheckedChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

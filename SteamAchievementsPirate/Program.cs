@@ -16,20 +16,31 @@ namespace SteamAchivmentsForPirates
 
         public static void GetLastVersion()
         {
-            WebClient client = new WebClient();
-            client.Headers.Set("User-Agent", "request");
-            string json = client.DownloadString("https://api.github.com/repos/pukpuker/SteamAchievementsPirate/releases/latest");
-            JObject obj = JObject.Parse(json);
-            string git_version_latest = (string)obj["tag_name"];
-            if ((git_version_latest != Settings.version) && !Settings.debug)
+            try
             {
-                var result = MessageBox.Show("A new version of the program has been released. Do you want to upgrade?", "SAP", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
-                if (result == DialogResult.Yes)
+                WebClient client = new WebClient();
+                client.Headers.Set("User-Agent", "request");
+                string json = client.DownloadString("https://api.github.com/repos/pukpuker/SteamAchievementsPirate/releases/latest");
+                JObject obj = JObject.Parse(json);
+                string git_version_latest = (string)obj["tag_name"];
+                if ((git_version_latest != Settings.version) && !Settings.debug)
                 {
-                    MessageBox.Show(Settings.debug.ToString());
-                    Process.Start("explorer.exe", "https://github.com/pukpuker/SteamAchievementsPirate/releases/");
-                    Environment.Exit(0);
+                    var result = MessageBox.Show("A new version of the program has been released. Do you want to upgrade?", "SAP", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+                    if (result == DialogResult.Yes)
+                    {
+                        MessageBox.Show(Settings.debug.ToString());
+                        Process.Start("explorer.exe", "https://github.com/pukpuker/SteamAchievementsPirate/releases/");
+                        Environment.Exit(0);
+                    }
                 }
+            }
+            catch (WebException) // if ratelimit (403)
+            {
+
+            }
+            catch (Exception ex)
+            {
+                Settings.Exp(ex);
             }
         }
 

@@ -19,7 +19,7 @@ public class OverlaySteamNewForm : Form
     int WithOverlay = 0;
     public OverlaySteamNewForm(string name, string description, string url)
     {
-        Console.WriteLine("[OverlaySteamNEW]");
+        Console.WriteLine("[+] Overlay: SteamNew");
         this.FormBorderStyle = FormBorderStyle.None;
         this.SetStyle(ControlStyles.SupportsTransparentBackColor, true);
         this.ShowInTaskbar = false;

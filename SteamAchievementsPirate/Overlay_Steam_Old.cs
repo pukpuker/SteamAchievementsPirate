@@ -19,6 +19,7 @@ public class OverlayForm : Form
     int WithOverlay = 0;
     public OverlayForm(string name, string description, string url)
     {
+        Console.WriteLine("[+] Overlay: SteamOld");
         this.FormBorderStyle = FormBorderStyle.None;
         this.ShowInTaskbar = false;
         this.TopMost = true;

@@ -52,10 +52,11 @@
             startup_checkbox.AutoSize = true;
             startup_checkbox.Location = new Point(12, 12);
             startup_checkbox.Name = "startup_checkbox";
-            startup_checkbox.Size = new Size(67, 19);
+            startup_checkbox.Size = new Size(64, 19);
             startup_checkbox.TabIndex = 0;
-            startup_checkbox.Text = "Startup ";
+            startup_checkbox.Text = "Startup";
             startup_checkbox.UseVisualStyleBackColor = true;
+            startup_checkbox.CheckedChanged += startup_checkbox_CheckedChanged;
             // 
             // start_threads_checkbox
             // 
