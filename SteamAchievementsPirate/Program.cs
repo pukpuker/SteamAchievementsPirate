@@ -114,12 +114,16 @@ namespace SteamAchivmentsForPirates
             }
         }
 
-        public static void Main()
+        public static void Main(string[] args = null)
         {
 #if DEBUG
             Settings.AllocConsole();
             Settings.ChangeTitle();
 #endif
+            if (args.Length > 0 && args[0] == "autostart")
+            {
+                Settings.FromAutoRun = true;
+            }
             System.IO.Directory.SetCurrentDirectory(System.AppDomain.CurrentDomain.BaseDirectory);
             Settings.SettingsParser();
             GetLastVersion();

@@ -15,6 +15,7 @@ namespace SteamAchivmentsForPirates
         public static bool HaveGames = false;
         public static bool ThreadIsStart = false;
         public static bool debug = false;
+        public static bool FromAutoRun = false;
         // settings from .env
         public static string api_key = "";
         public static string language = "";
@@ -165,7 +166,8 @@ namespace SteamAchivmentsForPirates
         }
         public static bool SetAutorunValue(bool autorun)
         {
-            string executablePath = Application.ExecutablePath;
+            string arg = "autostart";
+            string executablePath = Application.ExecutablePath + " " + arg;
             var nameApp = "SAP";
             RegistryKey reg;
             reg = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);

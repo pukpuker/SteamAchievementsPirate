@@ -32,7 +32,14 @@ namespace SteamAchievementsPirate
             trayMenu.Items.Add("Hide", null, ShowHide);
             trayMenu.Items.Add("Show", null, ShowTree);
             trayMenu.Items.Add("Exit", null, OnExit);
-            Visible = true;
+            if (Settings.FromAutoRun)
+            {
+                Visible = false;
+            }
+            else
+            {
+                Visible = true;
+            }
             ShowInTaskbar = true;
             trayIcon = new NotifyIcon();
             trayIcon.Text = "MysqlBackuper";
