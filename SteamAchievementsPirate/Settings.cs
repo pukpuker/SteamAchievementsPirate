@@ -7,7 +7,7 @@ namespace SteamAchivmentsForPirates
 {
     public static class Settings
     {
-        public static readonly string version = "0.2.4";
+        public static readonly string version = "0.2.5";
         static readonly string env_file = ".env";
         public static string path = "games\\";
         public static readonly string[] Path_Def_Games = { "C:\\Games", "D:\\Games" };
@@ -22,6 +22,7 @@ namespace SteamAchivmentsForPirates
         public static bool StartUP = false;
         public static bool StartThreads = false;
         public static string notif_style = "";
+        public static string overlay_location = "";
         // settins from .env
 
         public static void CreateDirectory()
@@ -93,6 +94,10 @@ namespace SteamAchivmentsForPirates
                                     else if (parametr == "notif_style")
                                     {
                                         notif_style = value;
+                                    }
+                                    else if (parametr == "overlay_location")
+                                    {
+                                        overlay_location = value;
                                     }
                                 }
                                 else

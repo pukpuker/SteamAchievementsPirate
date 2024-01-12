@@ -1,10 +1,13 @@
-﻿using System.Media;
+﻿using SteamAchievementsPirate.Properties;
+using SteamAchivmentsForPirates;
+using System.Media;
 using System.Net;
 using System.Runtime.InteropServices;
 using Label = System.Windows.Forms.Label;
 
 public class OverlaySteamNewForm : Form
 {
+    public static int location = 0;
 
     [DllImport("user32.dll")]
     static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int X, int Y, int cx, int cy, uint uFlags);
@@ -17,6 +20,28 @@ public class OverlaySteamNewForm : Form
     int endPosY;
     int DesktopPos = 30; // 30
     int WithOverlay = 0;
+
+    public void ebatoriaya()
+    {
+        var local = Settings.overlay_location;
+        if (local == "RU")
+        {
+            location = Screen.PrimaryScreen.Bounds.Top - this.Height - -70;
+        }
+        else if (local == "LU")
+        {
+
+        }
+        else if (local == "LD")
+        {
+
+        }
+        else
+        {
+            location = Screen.PrimaryScreen.Bounds.Height - this.Height - -50;
+        }
+    }
+
     public OverlaySteamNewForm(string name, string description, string url)
     {
         Console.WriteLine("[+] Overlay: SteamNew");
@@ -31,7 +56,10 @@ public class OverlaySteamNewForm : Form
         this.StartPosition = FormStartPosition.Manual;
         bool swinarnik = false;
         endPosY = Screen.PrimaryScreen.Bounds.Height - this.Height - WithOverlay;
-        this.Location = new Point(Screen.PrimaryScreen.Bounds.Width - this.Width, Screen.PrimaryScreen.Bounds.Height - this.Height - -50); // Уменьшите значение Y, чтобы поднять окно выше
+        var position = Screen.PrimaryScreen.Bounds.Height - this.Height - -50; // orig (RD)
+                                                                               //var position = Screen.PrimaryScreen.Bounds.Top - this.Height - -70;
+        ebatoriaya();
+        this.Location = new Point(Screen.PrimaryScreen.Bounds.Width - this.Width, position); // Уменьшите значение Y, чтобы поднять окно выше
 
         WebRequest request = WebRequest.Create(url);
         Image image;

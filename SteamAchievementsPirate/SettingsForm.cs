@@ -13,103 +13,88 @@ namespace SteamAchievementsPirate
         private void SettingsForm_Load(object sender, EventArgs e)
         {
             LanguageComboBox.Text = Settings.language;
-            if (Settings.api_key == "1B01FE5A4ED8E822F7763B63F7A8D5FE")
-            {
-                steamapiTextBox.Text = $"FREE";
-            }
-            else
-            {
-                steamapiTextBox.Text = Settings.api_key;
-            }
+            steamapiTextBox.Text = Settings.api_key == "1B01FE5A4ED8E822F7763B63F7A8D5FE" ? "FREE" : Settings.api_key;
             startup_checkbox.Checked = Settings.StartUP;
             start_threads_checkbox.Checked = Settings.StartThreads;
-            string ready_path = "";
-            foreach (var one in Settings.games_path)
-            {
-                if (ready_path == "")
-                {
-                    ready_path = one;
-                }
-                else
-                {
-                    ready_path = ready_path + $";{one}";
-                }
-            }
-            pathBox.Text = ready_path;
-            if (Settings.notif_style == "steamnew")
-            {
-                NotifStyleComboBox.Text = "Steam New";
-            }
-            else if (Settings.notif_style == "steamold")
-            {
-                NotifStyleComboBox.Text = "Steam Old";
-            }
+            locationoverlay_box.Text = GetTextOverlayLocation(Settings.overlay_location);
+            pathBox.Text = string.Join(";", Settings.games_path);
+            NotifStyleComboBox.Text = GetNotifStyleText(Settings.notif_style);
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
             try
             {
-                if (LanguageComboBox.Text != Settings.language)
-                {
-                    Settings.UpdateValue("language", LanguageComboBox.Text);
-                }
-                if (!string.IsNullOrWhiteSpace(Settings.api_key) || steamapiTextBox.Text != Settings.api_key)
-                {
-                    Settings.UpdateValue("api_key", steamapiTextBox.Text);
-                }
-                if (!string.IsNullOrWhiteSpace(pathBox.Text))
-                {
-                    Settings.UpdateValue("games_path", pathBox.Text);
-                }
-                if (!string.IsNullOrWhiteSpace(NotifStyleComboBox.Text))
-                {
-                    string itog = null;
-                    if (NotifStyleComboBox.Text == "Steam New")
-                    {
-                        itog = "steamnew";
-                    }
-                    else if (NotifStyleComboBox.Text == "Steam Old")
-                    {
-                        itog = "steamold";
-                    }
-                    else
-                    {
-                        itog = "steamnew";
-                    }
-                    Settings.UpdateValue("notif_style", itog);
-                }
-                if (startup_checkbox.Checked != Settings.StartUP)
-                {
-                    Settings.SetAutorunValue(startup_checkbox.Checked);
-                    Settings.UpdateValue("startup", startup_checkbox.Checked.ToString());
-                }
-                if (start_threads_checkbox.Checked != Settings.StartThreads)
-                {
-                    Settings.UpdateValue("start_threads", start_threads_checkbox.Checked.ToString());
-                }
-                if (string.IsNullOrWhiteSpace(LanguageComboBox.Text))
-                {
-                    Settings.UpdateValue("language", "english");
-                }
-                if (string.IsNullOrWhiteSpace(steamapiTextBox.Text))
-                {
-                    Settings.UpdateValue("api_key", "FREE");
-                }
-                if (string.IsNullOrWhiteSpace(pathBox.Text))
-                {
-                    Settings.UpdateValue("games_path", "C:\\Games");
-                }
-                if (string.IsNullOrWhiteSpace(NotifStyleComboBox.Text))
-                {
-                    Settings.UpdateValue("notif_style", "steamnew");
-                }
+                UpdateSetting("language", LanguageComboBox.Text, "english");
+                UpdateSetting("api_key", steamapiTextBox.Text, "FREE");
+                UpdateSetting("games_path", pathBox.Text, "C:\\Games");
+                UpdateSetting("notif_style", GetNotifStyle(NotifStyleComboBox.Text), "steamnew");
+                UpdateSetting("overlay_location", GetOverlayLocation(locationoverlay_box.Text), "RD");
+                UpdateSetting("startup", startup_checkbox.Checked.ToString(), Settings.StartUP.ToString());
+                UpdateSetting("start_threads", start_threads_checkbox.Checked.ToString(), Settings.StartThreads.ToString());
+
                 Settings.SettingsParser();
                 MessageBox.Show("Settings have been applied!", "SAP", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (Exception ex)
             {
                 Settings.Exp(ex);
+            }
+        }
+
+        private void UpdateSetting(string key, string value, string defaultValue)
+        {
+            if (string.IsNullOrWhiteSpace(value))
+            {
+                Settings.UpdateValue(key, defaultValue);
+            }
+            else
+            {
+                Settings.UpdateValue(key, value);
+            }
+        }
+
+        private string GetNotifStyleText(string style)
+        {
+            return style == "steamold" ? "Steam Old" : "Steam New";
+        }
+
+        private string GetNotifStyle(string text)
+        {
+            if (text == "Steam Old")
+            {
+                return "steamold";
+            }
+            return "steamnew";
+        }
+
+        private string GetTextOverlayLocation(string text)
+        {
+            switch (text)
+            {
+                case "RU":
+                    return "Right Up";
+                case "LU":
+                    return "Left Up";
+                case "LD":
+                    return "Left Down";
+                default:
+                    return "Right Down";
+            }
+
+        }
+        private string GetOverlayLocation(string text)
+        {
+            switch (text)
+            {
+                case "Right Up":
+                    return "RU";
+                case "Left Up":
+                    return "LU";
+                case "Left Down":
+                    return "LD";
+                default:
+                    return "RD";
             }
         }
 
@@ -140,6 +125,11 @@ namespace SteamAchievementsPirate
         private void startup_checkbox_CheckedChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("Select in which part of the screen the overlay will be displayed.", "SAP", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
     }
 }

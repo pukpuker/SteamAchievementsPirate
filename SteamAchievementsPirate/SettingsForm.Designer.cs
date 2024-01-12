@@ -34,7 +34,7 @@
             button1 = new Button();
             label1 = new Label();
             label2 = new Label();
-            comboBox2 = new ComboBox();
+            locationoverlay_box = new ComboBox();
             steamapiTextBox = new TextBox();
             label3 = new Label();
             pathBox = new TextBox();
@@ -45,6 +45,7 @@
             label5 = new Label();
             NotifStyleComboBox = new ComboBox();
             button5 = new Button();
+            button6 = new Button();
             SuspendLayout();
             // 
             // startup_checkbox
@@ -105,14 +106,14 @@
             label2.TabIndex = 6;
             label2.Text = "Overlay Loc:";
             // 
-            // comboBox2
+            // locationoverlay_box
             // 
-            comboBox2.FormattingEnabled = true;
-            comboBox2.Items.AddRange(new object[] { "Right Down", "Right Up", "Left Up", "Left Down" });
-            comboBox2.Location = new Point(88, 91);
-            comboBox2.Name = "comboBox2";
-            comboBox2.Size = new Size(147, 23);
-            comboBox2.TabIndex = 5;
+            locationoverlay_box.FormattingEnabled = true;
+            locationoverlay_box.Items.AddRange(new object[] { "Right Down", "Right Up", "Left Up", "Left Down" });
+            locationoverlay_box.Location = new Point(88, 91);
+            locationoverlay_box.Name = "locationoverlay_box";
+            locationoverlay_box.Size = new Size(147, 23);
+            locationoverlay_box.TabIndex = 5;
             // 
             // steamapiTextBox
             // 
@@ -204,11 +205,22 @@
             button5.UseVisualStyleBackColor = true;
             button5.Click += button5_Click;
             // 
+            // button6
+            // 
+            button6.Location = new Point(241, 90);
+            button6.Name = "button6";
+            button6.Size = new Size(27, 23);
+            button6.TabIndex = 17;
+            button6.Text = "?";
+            button6.UseVisualStyleBackColor = true;
+            button6.Click += button6_Click;
+            // 
             // SettingsForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(282, 255);
+            Controls.Add(button6);
             Controls.Add(button5);
             Controls.Add(label5);
             Controls.Add(NotifStyleComboBox);
@@ -220,7 +232,7 @@
             Controls.Add(label3);
             Controls.Add(steamapiTextBox);
             Controls.Add(label2);
-            Controls.Add(comboBox2);
+            Controls.Add(locationoverlay_box);
             Controls.Add(label1);
             Controls.Add(button1);
             Controls.Add(LanguageComboBox);
@@ -244,7 +256,7 @@
         private Button button1;
         private Label label1;
         private Label label2;
-        private ComboBox comboBox2;
+        private ComboBox locationoverlay_box;
         private TextBox steamapiTextBox;
         private Label label3;
         private TextBox pathBox;
@@ -255,5 +267,6 @@
         private Label label5;
         private ComboBox NotifStyleComboBox;
         private Button button5;
+        private Button button6;
     }
 }
