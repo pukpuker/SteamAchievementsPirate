@@ -26,19 +26,27 @@ public class OverlaySteamNewForm : Form
         var local = Settings.overlay_location;
         if (local == "RU")
         {
-            location = Screen.PrimaryScreen.Bounds.Top - this.Height - -70;
+            endPosY = Screen.PrimaryScreen.Bounds.Top;
+            location = Screen.PrimaryScreen.Bounds.Top -50;
+            this.Location = new Point(Screen.PrimaryScreen.Bounds.Width - this.Width, location);
         }
         else if (local == "LU")
         {
-
+            endPosY = Screen.PrimaryScreen.Bounds.Top;
+            location = Screen.PrimaryScreen.Bounds.Top - 50;
+            this.Location = new Point(Screen.PrimaryScreen.Bounds.Top - this.Top, location);
         }
         else if (local == "LD")
         {
-
+            endPosY = Screen.PrimaryScreen.Bounds.Height - this.Height - WithOverlay;
+            location = Screen.PrimaryScreen.Bounds.Height - this.Height - -50;
+            this.Location = new Point(0, location);
         }
         else
         {
+            endPosY = Screen.PrimaryScreen.Bounds.Height - this.Height - WithOverlay;
             location = Screen.PrimaryScreen.Bounds.Height - this.Height - -50;
+            this.Location = new Point(Screen.PrimaryScreen.Bounds.Width - this.Width, location);
         }
     }
 
@@ -55,12 +63,10 @@ public class OverlaySteamNewForm : Form
         this.Size = new Size(283, 70);
         this.StartPosition = FormStartPosition.Manual;
         bool swinarnik = false;
-        endPosY = Screen.PrimaryScreen.Bounds.Height - this.Height - WithOverlay;
-        var position = Screen.PrimaryScreen.Bounds.Height - this.Height - -50; // orig (RD)
-                                                                               //var position = Screen.PrimaryScreen.Bounds.Top - this.Height - -70;
+        //var position = Screen.PrimaryScreen.Bounds.Height - this.Height - -50; // orig (RD)
+     
+        //var position = Screen.PrimaryScreen.Bounds.Top - this.Height - -70;
         ebatoriaya();
-        this.Location = new Point(Screen.PrimaryScreen.Bounds.Width - this.Width, position); // Уменьшите значение Y, чтобы поднять окно выше
-
         WebRequest request = WebRequest.Create(url);
         Image image;
         using (WebResponse response = request.GetResponse())
@@ -124,13 +130,56 @@ public class OverlaySteamNewForm : Form
         this.BackgroundImage = SteamAchievementsPirate.Properties.Resources.steam_photo;
         timer = new System.Windows.Forms.Timer();
         timer.Interval = 1;
-        timer.Tick += Timer_Tick;
+        if (Settings.overlay_location == "RU" || Settings.overlay_location == "LU")
+        {
+            timer.Tick += TimerUP_Tick;
+        }
+        else
+        {
+            timer.Tick += Timer_Tick;
+        }
         timer.Start();
         this.Load += (sender, e) => {
             SetWindowPos(this.Handle, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
         };
     }
 
+    private void TimerUP_Tick(object sender, EventArgs e)
+    {
+        if (this.Location.Y < endPosY)
+        {
+            this.Location = new Point(this.Location.X, this.Location.Y + 5);
+        }
+        else
+        {
+            timer.Stop();
+            Task.Delay(5000).Wait();
+            timerHide = new System.Windows.Forms.Timer();
+            timerHide.Interval = 1;
+            if (Settings.overlay_location == "RU" || Settings.overlay_location == "LU")
+            {
+                timerHide.Tick += TimerHideUP_Tick;
+            }
+            else
+            {
+                timerHide.Tick += TimerHide_Tick;
+            }
+            timerHide.Start();
+        }
+    }
+
+    private void TimerHideUP_Tick(object sender, EventArgs e)
+    {
+        if (this.Location.Y > Screen.PrimaryScreen.Bounds.Top - 50)
+        {
+            this.Location = new Point(this.Location.X, this.Location.Y - 5);
+        }
+        else
+        {
+            timerHide.Stop();
+            this.Close();
+        }
+    }
     private void Timer_Tick(object sender, EventArgs e)
     {
         if (this.Location.Y > endPosY)

@@ -129,7 +129,7 @@ namespace SteamAchievementsPirate
 
         private void button6_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Select in which part of the screen the overlay will be displayed.", "SAP", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show("Select in which part of the screen the overlay will be displayed. \nATTENTION! THIS FEATURE IS ONLY AVAILABLE ON THE NEW NOTIFICATION STYLE", "SAP", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
     }
 }
