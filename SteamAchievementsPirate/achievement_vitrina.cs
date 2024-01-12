@@ -80,6 +80,8 @@ namespace SteamAchievementsPirate
                     else
                     {
                         photo_path = Path.Combine(Settings.path, $"AchiviementsPhotos", $"{appid}_{name}_gray.jpg");
+                        locked_ach++;
+                        local_locked = 1;
                     }
                     if (hidden == 0)
                     {
