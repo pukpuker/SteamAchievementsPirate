@@ -46,22 +46,19 @@ public class OverlaySteamNewForm : Form
         else
         {
             endPosY = Screen.PrimaryScreen.Bounds.Height - this.Height - WithOverlay;
-            location = Screen.PrimaryScreen.Bounds.Height - this.Height - -60;
+            location = Screen.PrimaryScreen.Bounds.Height - this.Height - -70;
             this.Location = new Point(Screen.PrimaryScreen.Bounds.Width - this.Width, location);
         }
     }
-
-    public async Task<Task> PhotoDownAsync(string url)
+    protected override CreateParams CreateParams
     {
-        WebRequest request = WebRequest.Create(url);
-        using (WebResponse response = await request.GetResponseAsync())
-        using (Stream stream = response.GetResponseStream())
+        get
         {
-            image = Image.FromStream(stream);
+            var cp = base.CreateParams;
+            cp.ExStyle |= 0x02000000;    // Turn on WS_EX_COMPOSITED
+            return cp;
         }
-        return Task.CompletedTask;
     }
-
 
     public OverlaySteamNewForm(string name, string description, string url)
     {
@@ -80,7 +77,13 @@ public class OverlaySteamNewForm : Form
 
         bool swinarnik = false;
         ebatoriaya();
-        PhotoDownAsync(url).Wait();
+        WebRequest request = WebRequest.Create(url);
+        using (WebResponse response = request.GetResponse())
+        using (Stream stream = response.GetResponseStream())
+        {
+            image = Image.FromStream(stream);
+        }
+
         SoundPlayer audio = new SoundPlayer(SteamAchievementsPirate.Properties.Resources.desktop_toast_default);
         audio.Play();
         PictureBox pictureBoxBackground = new PictureBox
