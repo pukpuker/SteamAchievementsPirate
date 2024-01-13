@@ -63,7 +63,7 @@ namespace SteamAchievementsPirate
             {
                 Thread t = new Thread(() =>
                 {
-                    Application.Run(new achievement_vitrina());
+                    Application.Run(new AchievementsForm());
                 });
                 t.Start();
             }

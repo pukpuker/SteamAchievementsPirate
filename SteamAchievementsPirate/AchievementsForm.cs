@@ -9,6 +9,9 @@ namespace SteamAchievementsPirate
 
         private bool isMouseDown = false;
         private Point mouseOffset;
+        Panel panel_suka;
+        Button button_suka;
+        Label label_suka;
 
         public AchievementsForm()
         {
@@ -18,65 +21,79 @@ namespace SteamAchievementsPirate
             this.MouseUp += new MouseEventHandler(Form1_MouseUp);
         }
 
+        private void BackButton(object sender, EventArgs e)
+        {
+            this.Controls.Remove(button_suka);
+            this.Controls.Remove(panel_suka);
+            this.Controls.Remove(label_suka);
+            panel1.Enabled = true;
+            panel1.Visible = true;
+        }
+
         private void AddedButon()
         {
-            SX.games_APPIDS.Add("440");
-            SX.games_APPIDS.Add("730");
-            SX.games_APPIDS.Add("271590");
-            SX.games_APPIDS.Add("100");
-            SX.games_APPIDS.Add("578080");
-            int sloy = 0;
-            int list_pos = 0;
-            for (int i = 0; i < SX.games_APPIDS.Count; i++)
+            try
             {
-                var path_combine = Path.Combine(Settings.path, "AchiviementsPhotos", $"{SX.games_APPIDS[i]}_header.jpg");
-                if (!File.Exists(path_combine))
+                int sloy = 0;
+                int list_pos = 0;
+                for (int i = 0; i < SX.games_APPIDS.Count; i++)
                 {
-                    Achievements.ugar.DownloadFile($"https://steamcdn-a.akamaihd.net/steam/apps/{SX.games_APPIDS[i]}/header.jpg", path_combine);
+                    var path_combine = Path.Combine(Settings.path, "AchiviementsPhotos", $"{SX.games_APPIDS[i]}_header.jpg");
+                    if (!File.Exists(path_combine))
+                    {
+                        Achievements.ugar.DownloadFile($"https://steamcdn-a.akamaihd.net/steam/apps/{SX.games_APPIDS[i]}/header.jpg", path_combine);
+                    }
+                    if (!File.Exists($"{Settings.path}\\{SX.games_APPIDS[i]}.txt"))
+                    {
+                        Achievements.CreateCheme(SX.games_APPIDS[i]);
+                    }
+                    //button
+                    Button button = new Button();
+                    button.BackgroundImage = Image.FromFile(path_combine);
+                    button.BackgroundImageLayout = ImageLayout.Stretch;
+                    button.FlatStyle = FlatStyle.Flat;
+                    button.FlatAppearance.BorderSize = 0;
+                    button.BackColor = Color.Transparent;
+                    button.Click += NewButton_Click;
+                    button.Tag = SX.games_APPIDS[i];
+                    button.Size = new Size(200, 93);
+                    //button
+                    //label
+                    Label label = new Label();
+                    string game_name = File.ReadAllText($"{Settings.path}\\{SX.games_APPIDS[i]}_info.txt").Split('|')[1];
+                    label.Text = $"{game_name}";
+                    label.ForeColor = Color.White;
+                    label.BackColor = Color.Transparent;
+                    label.AutoSize = true;
+                    //label
+                    if ((i % 4 == 0) && i != 0)
+                    {
+                        sloy++;
+                        list_pos = 0;
+                    }
+                    if (sloy == 0)
+                    {
+                        button.Location = new Point(210 * list_pos, sloy);
+                        label.Location = new Point(210 * list_pos, 100);
+                        list_pos++;
+                    }
+                    else
+                    {
+                        button.Location = new Point(210 * list_pos, sloy + 130);
+                        label.Location = new Point(210 * list_pos, sloy + 230);
+                        list_pos++;
+                    }
+                    panel1.Controls.Add(button);
+                    panel1.Controls.Add(label);
                 }
-                if (!File.Exists($"{Settings.path}\\{SX.games_APPIDS[i]}.txt"))
-                {
-                    Achievements.CreateCheme(SX.games_APPIDS[i]);
-                }
-                //button
-                Button button = new Button();
-                button.BackgroundImage = Image.FromFile(path_combine);
-                button.BackgroundImageLayout = ImageLayout.Stretch;
-                button.FlatStyle = FlatStyle.Flat;
-                button.FlatAppearance.BorderSize = 0;
-                button.BackColor = Color.Transparent;
-                button.Click += NewButton_Click;
-                button.Tag = SX.games_APPIDS[i];
-                button.Size = new Size(200, 93);
-                //button
-                //label
-                Label label = new Label();
-                string game_name = $"Application Number {i}";
-                //string game_name = File.ReadAllText($"{SX.games_APPIDS[i]}_info.txt").Split('|')[1];
-                label.Text = $"{game_name}";
-                label.ForeColor = Color.White;
-                label.BackColor = Color.Transparent;
-                label.AutoSize = true;
-                //label
-                if ((i % 4 == 0) && i != 0)
-                {
-                    sloy++;
-                    list_pos = 0;
-                }
-                if (sloy == 0)
-                {
-                    button.Location = new Point(210 * list_pos, sloy);
-                    label.Location = new Point(210 * list_pos, 100);
-                    list_pos++;
-                }
-                else
-                {
-                    button.Location = new Point(210 * list_pos, sloy + 130);
-                    label.Location = new Point(210 * list_pos, sloy + 230);
-                    list_pos++;
-                }
-                panel1.Controls.Add(button);
-                panel1.Controls.Add(label);
+            }
+            catch (FileNotFoundException)
+            {
+                MessageBox.Show("Unknown Appid (file in 'games' folder", "SAP", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            catch (Exception ex)
+            {
+                Settings.Exp(ex);
             }
         }
         private void NewButton_Click(object sender, EventArgs e)
@@ -91,17 +108,40 @@ namespace SteamAchievementsPirate
             Panel panel = new Panel
             {
                 AutoScroll = true,
-                Location = new Point(10, 25),
+                Location = new Point(10, 40),
                 Size = new Size(830, 400),
                 BorderStyle = BorderStyle.None
             };
+            panel_suka = panel;
+            //button
+            Button back_button = new Button();
+            back_button.Text = "Back to menu";
+            back_button.ForeColor = Color.White;
+            back_button.Location = new Point(670, 5);
+            back_button.AutoSize = true;
+            back_button.Click += BackButton;
+            button_suka = back_button;
+            //button
+
+            //label_information
+            Label information_label = new Label();
+            information_label.ForeColor = Color.White;
+            information_label.Location = new Point(10, 10);
+            information_label.AutoSize = true;  
+            label_suka = information_label;
+            //label_information
+            this.Controls.Add(back_button);
             this.Controls.Add(panel);
+            this.Controls.Add(information_label);
+            label_suka.MouseDown += new MouseEventHandler(Form1_MouseDown);
+            label_suka.MouseMove += new MouseEventHandler(Form1_MouseMove);
+            label_suka.MouseUp += new MouseEventHandler(Form1_MouseUp);
             var ultra = Sort(appid, panel, false, 0);
             Sort(appid, panel, true, ultra.Item1);
             int count_hidden = ultra.Item2;
             int unlocked_ach = ultra.Item3;
             int locked_ach = ultra.Item4;
-            //label_information.Text = $"Hidden: {count_hidden}\nUnlocked: {unlocked_ach}\nLocked: {locked_ach}";
+            label_suka.Text = $"{File.ReadAllText($"{Settings.path}\\{app_id}_info.txt").Split('|')[1]}                                                           Hidden: {count_hidden} | Unlocked: {unlocked_ach} | Locked: {locked_ach}"; // lol
         }
 
         private (int, int, int, int) Sort(string appid, Panel panel, bool locked, int i)
@@ -223,6 +263,12 @@ namespace SteamAchievementsPirate
                             //    SizeMode = PictureBoxSizeMode.AutoSize
                             //};
 
+                            Label ACHIVEMENTBOX = new Label
+                            {
+                                Location = new Point(0, 0 + (100 * i)),
+                                Size = new Size(800, 83),
+                                BackColor = Color.FromArgb(35, 38, 46),
+                            };
                             PictureBox newPictureBox = new PictureBox
                             {
                                 Size = new Size(64, 64),
@@ -258,6 +304,7 @@ namespace SteamAchievementsPirate
                             panel.Controls.Add(newLabel);
                             panel.Controls.Add(newLabel2);
                             panel.Controls.Add(percent);
+                            panel.Controls.Add(ACHIVEMENTBOX);
                             //panel.Controls.Add(Rare);
                             i++;
                         }
