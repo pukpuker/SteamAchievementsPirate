@@ -44,6 +44,7 @@ namespace SteamAchivmentsForPirates
 
         public static void SettingsParser()
         {
+            games_path = new List<string>();
             try
             {
                 DebugOrNo();

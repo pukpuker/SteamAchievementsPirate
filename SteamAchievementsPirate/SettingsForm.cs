@@ -28,13 +28,15 @@ namespace SteamAchievementsPirate
             {
                 UpdateSetting("language", LanguageComboBox.Text, "english");
                 UpdateSetting("api_key", steamapiTextBox.Text, "FREE");
-                UpdateSetting("games_path", pathBox.Text, "C:\\Games");
+                if (!Settings.games_path.Contains(pathBox.Text))
+                {
+                    UpdateSetting("games_path", pathBox.Text, "C:\\Games");
+                }
                 UpdateSetting("notif_style", GetNotifStyle(NotifStyleComboBox.Text), "steamnew");
                 UpdateSetting("overlay_location", GetOverlayLocation(locationoverlay_box.Text), "RD");
                 UpdateSetting("startup", startup_checkbox.Checked.ToString(), Settings.StartUP.ToString());
                 UpdateSetting("start_threads", start_threads_checkbox.Checked.ToString(), Settings.StartThreads.ToString());
                 UpdateSetting("autoparser", startparserbox1.Checked.ToString(), Settings.StartParserFromStart.ToString());
-
                 Settings.SettingsParser();
                 MessageBox.Show("Settings have been applied!", "SAP", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }

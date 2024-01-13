@@ -26,6 +26,7 @@ namespace SteamAchievementsPirate
             this.Controls.Remove(button_suka);
             this.Controls.Remove(panel_suka);
             this.Controls.Remove(label_suka);
+            GC.Collect();
             panel1.Enabled = true;
             panel1.Visible = true;
         }
@@ -272,7 +273,7 @@ namespace SteamAchievementsPirate
                             PictureBox newPictureBox = new PictureBox
                             {
                                 Size = new Size(64, 64),
-                                Location = new Point(10, 10 + (74 * i)),
+                                Location = new Point(10, 10 + (100 * i)),
                                 Image = Image.FromFile(photo_path),
                                 SizeMode = PictureBoxSizeMode.StretchImage
                             };
@@ -281,14 +282,14 @@ namespace SteamAchievementsPirate
                                 Text = $"{displayName}",
                                 ForeColor = Color.FromArgb(203, 205, 207),
                                 Font = new Font("Arial", 14, FontStyle.Bold),
-                                Location = new Point(90, 13 + (74 * i)),
+                                Location = new Point(90, 13 + (100 * i)),
                                 BackColor = Color.FromArgb(35, 38, 46),
                                 AutoSize = true
                             };
                             Label newLabel2 = new Label
                             {
                                 Text = $"{description}",
-                                Location = new Point(90, 43 + (74 * i)),
+                                Location = new Point(90, 43 + (100 * i)),
                                 Font = new Font("Arial", 9),
                                 ForeColor = Color.FromArgb(184, 188, 191),
                                 BackColor = Color.FromArgb(35, 38, 46),
@@ -297,7 +298,7 @@ namespace SteamAchievementsPirate
                             Label percent = new Label
                             {
                                 Text = $"{displayNameFinoUgr}% of players have this achievement",
-                                Location = new Point(90, 58 + (74 * i)),
+                                Location = new Point(90, 58 + (100 * i)),
                                 Font = new Font("Arial", 9),
                                 ForeColor = Color.FromArgb(139, 146, 154),
                                 BackColor = Color.FromArgb(35, 38, 46),
