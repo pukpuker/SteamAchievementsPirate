@@ -127,7 +127,10 @@ namespace SteamAchivmentsForPirates
             System.IO.Directory.SetCurrentDirectory(System.AppDomain.CurrentDomain.BaseDirectory);
             Settings.SettingsParser();
             GetLastVersion();
-            Achievements.ParsingGames();
+            if (Settings.StartParserFromStart)
+            {
+                Achievements.ParsingGames();
+            }
             string games = Games();
             if (string.IsNullOrWhiteSpace(games))
             {

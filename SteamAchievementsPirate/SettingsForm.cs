@@ -32,6 +32,7 @@ namespace SteamAchievementsPirate
                 UpdateSetting("overlay_location", GetOverlayLocation(locationoverlay_box.Text), "RD");
                 UpdateSetting("startup", startup_checkbox.Checked.ToString(), Settings.StartUP.ToString());
                 UpdateSetting("start_threads", start_threads_checkbox.Checked.ToString(), Settings.StartThreads.ToString());
+                UpdateSetting("autoparser", startparserbox1.Checked.ToString(), Settings.StartParserFromStart.ToString());
 
                 Settings.SettingsParser();
                 MessageBox.Show("Settings have been applied!", "SAP", MessageBoxButtons.OK, MessageBoxIcon.Information);

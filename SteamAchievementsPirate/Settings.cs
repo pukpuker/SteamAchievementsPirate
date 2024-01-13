@@ -22,6 +22,7 @@ namespace SteamAchivmentsForPirates
         public static List<string> games_path = new List<string>();
         public static bool StartUP = false;
         public static bool StartThreads = false;
+        public static bool StartParserFromStart = false;
         public static string notif_style = "";
         public static string overlay_location = "";
         // settins from .env
@@ -86,11 +87,11 @@ namespace SteamAchivmentsForPirates
                                     }
                                     else if (parametr == "startup")
                                     {
-                                        StartUP = bool.Parse(value);
+                                        bool.TryParse(value, out StartUP);
                                     }
                                     else if (parametr == "start_threads")
                                     {
-                                        StartThreads = bool.Parse(value);
+                                        bool.TryParse(value, out StartThreads);
                                     }
                                     else if (parametr == "notif_style")
                                     {
@@ -99,6 +100,10 @@ namespace SteamAchivmentsForPirates
                                     else if (parametr == "overlay_location")
                                     {
                                         overlay_location = value;
+                                    }
+                                    else if (parametr == "autoparser")
+                                    {
+                                        bool.TryParse(value, out StartParserFromStart);
                                     }
                                 }
                                 else

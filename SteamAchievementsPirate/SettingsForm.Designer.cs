@@ -46,6 +46,7 @@
             NotifStyleComboBox = new ComboBox();
             button5 = new Button();
             button6 = new Button();
+            startparserbox1 = new CheckBox();
             SuspendLayout();
             // 
             // startup_checkbox
@@ -73,14 +74,14 @@
             // 
             LanguageComboBox.FormattingEnabled = true;
             LanguageComboBox.Items.AddRange(new object[] { "russian", "english", "arabic", "bulgarian", "schinese", "tchinese", "czech", "danish", "dutch", "finnish", "french", "german", "greek", "hungarian", "indonesian", "italian", "japanese", "koreana", "norwegian", "polish", "portuguese", "brazilian", "romanian", "spanish", "latam", "swedish", "thai", "turkish", "ukrainian", "vietnamese" });
-            LanguageComboBox.Location = new Point(88, 62);
+            LanguageComboBox.Location = new Point(88, 86);
             LanguageComboBox.Name = "LanguageComboBox";
             LanguageComboBox.Size = new Size(147, 23);
             LanguageComboBox.TabIndex = 2;
             // 
             // button1
             // 
-            button1.Location = new Point(12, 209);
+            button1.Location = new Point(12, 238);
             button1.Name = "button1";
             button1.Size = new Size(256, 34);
             button1.TabIndex = 3;
@@ -91,7 +92,7 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(12, 65);
+            label1.Location = new Point(12, 89);
             label1.Name = "label1";
             label1.Size = new Size(62, 15);
             label1.TabIndex = 4;
@@ -100,7 +101,7 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(12, 94);
+            label2.Location = new Point(12, 118);
             label2.Name = "label2";
             label2.Size = new Size(72, 15);
             label2.TabIndex = 6;
@@ -110,14 +111,14 @@
             // 
             locationoverlay_box.FormattingEnabled = true;
             locationoverlay_box.Items.AddRange(new object[] { "Right Down", "Right Up", "Left Up", "Left Down" });
-            locationoverlay_box.Location = new Point(88, 91);
+            locationoverlay_box.Location = new Point(88, 115);
             locationoverlay_box.Name = "locationoverlay_box";
             locationoverlay_box.Size = new Size(147, 23);
             locationoverlay_box.TabIndex = 5;
             // 
             // steamapiTextBox
             // 
-            steamapiTextBox.Location = new Point(88, 120);
+            steamapiTextBox.Location = new Point(88, 144);
             steamapiTextBox.Name = "steamapiTextBox";
             steamapiTextBox.Size = new Size(147, 23);
             steamapiTextBox.TabIndex = 7;
@@ -125,7 +126,7 @@
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(12, 123);
+            label3.Location = new Point(12, 147);
             label3.Name = "label3";
             label3.Size = new Size(67, 15);
             label3.TabIndex = 8;
@@ -133,7 +134,7 @@
             // 
             // pathBox
             // 
-            pathBox.Location = new Point(88, 149);
+            pathBox.Location = new Point(88, 173);
             pathBox.Name = "pathBox";
             pathBox.Size = new Size(147, 23);
             pathBox.TabIndex = 9;
@@ -141,7 +142,7 @@
             // label4
             // 
             label4.AutoSize = true;
-            label4.Location = new Point(12, 152);
+            label4.Location = new Point(12, 176);
             label4.Name = "label4";
             label4.Size = new Size(50, 15);
             label4.TabIndex = 10;
@@ -149,7 +150,7 @@
             // 
             // button2
             // 
-            button2.Location = new Point(241, 149);
+            button2.Location = new Point(241, 173);
             button2.Name = "button2";
             button2.Size = new Size(27, 23);
             button2.TabIndex = 11;
@@ -159,7 +160,7 @@
             // 
             // button3
             // 
-            button3.Location = new Point(241, 120);
+            button3.Location = new Point(241, 144);
             button3.Name = "button3";
             button3.Size = new Size(27, 23);
             button3.TabIndex = 12;
@@ -169,7 +170,7 @@
             // 
             // button4
             // 
-            button4.Location = new Point(241, 62);
+            button4.Location = new Point(241, 86);
             button4.Name = "button4";
             button4.Size = new Size(27, 23);
             button4.TabIndex = 13;
@@ -180,7 +181,7 @@
             // label5
             // 
             label5.AutoSize = true;
-            label5.Location = new Point(12, 181);
+            label5.Location = new Point(12, 205);
             label5.Name = "label5";
             label5.Size = new Size(68, 15);
             label5.TabIndex = 15;
@@ -190,14 +191,14 @@
             // 
             NotifStyleComboBox.FormattingEnabled = true;
             NotifStyleComboBox.Items.AddRange(new object[] { "Steam New", "Steam Old" });
-            NotifStyleComboBox.Location = new Point(88, 178);
+            NotifStyleComboBox.Location = new Point(88, 202);
             NotifStyleComboBox.Name = "NotifStyleComboBox";
             NotifStyleComboBox.Size = new Size(147, 23);
             NotifStyleComboBox.TabIndex = 14;
             // 
             // button5
             // 
-            button5.Location = new Point(241, 178);
+            button5.Location = new Point(241, 202);
             button5.Name = "button5";
             button5.Size = new Size(27, 23);
             button5.TabIndex = 16;
@@ -207,7 +208,7 @@
             // 
             // button6
             // 
-            button6.Location = new Point(241, 90);
+            button6.Location = new Point(241, 114);
             button6.Name = "button6";
             button6.Size = new Size(27, 23);
             button6.TabIndex = 17;
@@ -215,11 +216,22 @@
             button6.UseVisualStyleBackColor = true;
             button6.Click += button6_Click;
             // 
+            // startparserbox1
+            // 
+            startparserbox1.AutoSize = true;
+            startparserbox1.Location = new Point(12, 62);
+            startparserbox1.Name = "startparserbox1";
+            startparserbox1.Size = new Size(168, 19);
+            startparserbox1.TabIndex = 18;
+            startparserbox1.Text = "Start Parser From Start App";
+            startparserbox1.UseVisualStyleBackColor = true;
+            // 
             // SettingsForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(282, 255);
+            ClientSize = new Size(282, 284);
+            Controls.Add(startparserbox1);
             Controls.Add(button6);
             Controls.Add(button5);
             Controls.Add(label5);
@@ -268,5 +280,6 @@
         private ComboBox NotifStyleComboBox;
         private Button button5;
         private Button button6;
+        private CheckBox startparserbox1;
     }
 }
