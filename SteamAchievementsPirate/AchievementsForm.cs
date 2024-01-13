@@ -168,29 +168,38 @@ namespace SteamAchievementsPirate
                             PictureBox newPictureBox = new PictureBox
                             {
                                 Size = new Size(64, 64),
-                                Location = new Point(10, 10 + (74 * i)),
+                                Location = new Point(10, 10 + (100 * i)),
                                 Image = Image.FromFile(photo_path),
                                 SizeMode = PictureBoxSizeMode.StretchImage
                             };
                             Label newLabel = new Label
                             {
                                 Text = $"{displayName}",
-                                Font = new Font("Arial", 14, FontStyle.Bold),
-                                Location = new Point(90, 13 + (74 * i)),
+                                Font = new Font("Arial", 14),
+                                Location = new Point(90, 13 + (100 * i)),
                                 ForeColor = Color.FromArgb(203, 205, 207),
+                                BackColor = Color.FromArgb(35, 38, 46),
                                 AutoSize = true
                             };
                             Label newLabel2 = new Label
                             {
                                 Text = $"{description}",
-                                Location = new Point(90, 43 + (74 * i)),
-                                Font = new Font("Arial", 8),
+                                Location = new Point(90, 43 + (100 * i)),
+                                Font = new Font("Arial", 9),
                                 ForeColor = Color.FromArgb(184, 188, 191),
+                                BackColor = Color.FromArgb(35, 38, 46),
                                 AutoSize = true
+                            };
+                            Label ACHIVEMENTBOX = new Label
+                            {
+                                Location = new Point(0, 0 + (100* i)),
+                                Size = new Size(800, 83),
+                                BackColor = Color.FromArgb(35, 38, 46),
                             };
                             panel.Controls.Add(newPictureBox);
                             panel.Controls.Add(newLabel);
                             panel.Controls.Add(newLabel2);
+                            panel.Controls.Add(ACHIVEMENTBOX);
                             i++;
                         }
                         else if (!locked && local_locked == 0)
