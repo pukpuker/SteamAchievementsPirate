@@ -142,7 +142,14 @@ namespace SteamAchievementsPirate
             int count_hidden = ultra.Item2;
             int unlocked_ach = ultra.Item3;
             int locked_ach = ultra.Item4;
-            label_suka.Text = $"{File.ReadAllText($"{Settings.path}\\{app_id}_info.txt").Split('|')[1]}                                                           Hidden: {count_hidden} | Unlocked: {unlocked_ach} | Locked: {locked_ach}"; // lol
+            int total = int.Parse(unlocked_ach.ToString()) + int.Parse(count_hidden.ToString()) + int.Parse(locked_ach.ToString());
+            double passPercentage = 0;
+            if (total != 0)
+            {
+                passPercentage = (double)int.Parse(unlocked_ach.ToString()) / total * 100;
+                passPercentage = Math.Round(passPercentage, 0);
+            }
+            label_suka.Text = $"{File.ReadAllText($"{Settings.path}\\{app_id}_info.txt").Split('|')[1]}                                                           Hidden: {count_hidden} | Unlocked: {unlocked_ach} | Locked: {locked_ach} | Pass percentage: {passPercentage}%"; // lol
         }
 
         private (int, int, int, int) Sort(string appid, Panel panel, bool locked, int i)
