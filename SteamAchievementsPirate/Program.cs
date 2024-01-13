@@ -155,6 +155,15 @@ namespace SteamAchivmentsForPirates
                 Application.Run(new MainForm());
             });
             t.Start();
+
+
+
+
+            Thread d = new Thread(() =>
+            {
+                Application.Run(new AchievementsForm());
+            });
+            d.Start();
         }
     }
 }
