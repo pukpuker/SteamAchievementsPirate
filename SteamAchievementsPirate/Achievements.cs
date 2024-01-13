@@ -82,7 +82,8 @@ namespace SteamAchivmentsForPirates
             {
                 string json_first_attempt = ugar.DownloadString($"https://store.steampowered.com/api/appdetails?appids={appid}");
                 JObject obj_first_attempt = JObject.Parse(json_first_attempt);
-                if (bool.Parse(obj_first_attempt[appid]["sucesss"].ToString()))
+                bool xuina = (bool)obj_first_attempt[appid]["success"];
+                if (xuina)
                 {
                     string game_name = (string)obj_first_attempt[appid]["data"]["name"];
                     return game_name;
@@ -100,6 +101,11 @@ namespace SteamAchivmentsForPirates
                 MessageBox.Show("403 From API Steam. RateLimited. Wait 10 seconds and Press OK to try again.", "SAP", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 string ugar = GetAppName(appid);
                 return ugar;
+            }
+            catch (Exception ex)
+            {
+                Settings.Exp(ex);
+                return null;
             }
         }
 
