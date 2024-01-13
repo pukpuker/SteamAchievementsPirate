@@ -39,7 +39,7 @@
             exitbutton.FlatStyle = FlatStyle.Flat;
             exitbutton.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 204);
             exitbutton.ForeColor = Color.Red;
-            exitbutton.Location = new Point(807, -1);
+            exitbutton.Location = new Point(811, -1);
             exitbutton.Name = "exitbutton";
             exitbutton.Size = new Size(35, 37);
             exitbutton.TabIndex = 0;
@@ -60,7 +60,7 @@
             minimizebutton.FlatStyle = FlatStyle.Flat;
             minimizebutton.Font = new Font("Segoe UI", 21.75F, FontStyle.Regular, GraphicsUnit.Point, 204);
             minimizebutton.ForeColor = Color.Red;
-            minimizebutton.Location = new Point(770, -10);
+            minimizebutton.Location = new Point(785, -9);
             minimizebutton.Name = "minimizebutton";
             minimizebutton.Size = new Size(31, 45);
             minimizebutton.TabIndex = 2;

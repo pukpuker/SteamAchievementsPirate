@@ -28,6 +28,7 @@ namespace SteamAchivmentsForPirates
                 t.Start();
             }
         }
+
         public static bool DownloadAchievements(string appid)
         {
             try
@@ -63,6 +64,11 @@ namespace SteamAchivmentsForPirates
                     return true;
                 }
             }
+            catch (NullReferenceException)
+            {
+                // achievements = 0 
+                return false;
+            }
             catch (Exception ex)
             {
                 Settings.Exp(ex);
@@ -74,41 +80,53 @@ namespace SteamAchivmentsForPirates
         {
             try
             {
-                string json = ugar.DownloadString($"https://api.steampowered.com/ISteamUserStats/GetSchemaForGame/v2?appid={appid}&key={Settings.api_key}&l={Settings.language}");
+                string json = ugar.DownloadString($"https://store.steampowered.com/api/appdetails?appids={appid}");
                 JObject obj = JObject.Parse(json);
-                string game_name = (string)obj["game"]["gameName"];
+                string game_name = (string)obj[appid]["data"]["name"];
                 return game_name;
             }
             catch (WebException)
             {
-                MessageBox.Show("403 From API Steam. Most likely incorrect SteamAPI Key (If u wanna change API_KEY, edit .env throw text editors or delete .env file, but ur another settings has been removed too). Exit.", "SAP", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                Environment.Exit(403);
-                return null;
+                MessageBox.Show("403 From API Steam. RateLimited. Wait 10 seconds and Press OK to try again.", "SAP", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                string ugar = GetAppName(appid);
+                return ugar;
             }
         }
 
         public static void CreateCheme(string appid)
         {
-            var path = Path.Combine(Settings.path, $"{appid}.txt");
-            if (!File.Exists(path))
+            try
             {
-                string json = ugar.DownloadString($"https://api.steampowered.com/ISteamUserStats/GetSchemaForGame/v2?appid={appid}&key={Settings.api_key}&l={Settings.language}");
-                File.WriteAllText(path, json);
-            }
-            else
-            {
-                string language_from_file = File.ReadAllText(Path.Combine(Settings.path, $"{appid}_info.txt")).Split('|')[4];
-                if (language_from_file != Settings.language)
+                var path = Path.Combine(Settings.path, $"{appid}.txt");
+                if (!File.Exists(path))
                 {
                     string json = ugar.DownloadString($"https://api.steampowered.com/ISteamUserStats/GetSchemaForGame/v2?appid={appid}&key={Settings.api_key}&l={Settings.language}");
                     File.WriteAllText(path, json);
                 }
+                else
+                {
+                    string language_from_file = File.ReadAllText(Path.Combine(Settings.path, $"{appid}_info.txt")).Split('|')[4];
+                    if (language_from_file != Settings.language)
+                    {
+                        string json = ugar.DownloadString($"https://api.steampowered.com/ISteamUserStats/GetSchemaForGame/v2?appid={appid}&key={Settings.api_key}&l={Settings.language}");
+                        File.WriteAllText(path, json);
+                    }
+                }
+                string percenet_file = $"{Settings.path}\\{appid}_percents.txt";
+                if (!File.Exists(percenet_file))
+                {
+                    string json = ugar.DownloadString($"https://api.steampowered.com/ISteamUserStats/GetGlobalAchievementPercentagesForApp/v0002/?gameid={appid}&format=json");
+                    File.WriteAllText(percenet_file, json);
+                }
             }
-            string percenet_file = $"{Settings.path}\\{appid}_percents.txt";
-            if (!File.Exists(percenet_file))
+            catch (WebException)
             {
-                string json = ugar.DownloadString($"https://api.steampowered.com/ISteamUserStats/GetGlobalAchievementPercentagesForApp/v0002/?gameid={appid}&format=json");
-                File.WriteAllText(percenet_file, json);
+                Task.Delay(500).Wait();
+                CreateCheme(appid);
+            }
+            catch (Exception ex)
+            {
+                Settings.Exp(ex);
             }
         }
 

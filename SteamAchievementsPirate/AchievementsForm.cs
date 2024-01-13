@@ -23,6 +23,8 @@ namespace SteamAchievementsPirate
             SX.games_APPIDS.Add("440");
             SX.games_APPIDS.Add("730");
             SX.games_APPIDS.Add("271590");
+            SX.games_APPIDS.Add("100");
+            SX.games_APPIDS.Add("578080");
             int sloy = 0;
             int list_pos = 0;
             for (int i = 0; i < SX.games_APPIDS.Count; i++)
@@ -32,6 +34,11 @@ namespace SteamAchievementsPirate
                 {
                     Achievements.ugar.DownloadFile($"https://steamcdn-a.akamaihd.net/steam/apps/{SX.games_APPIDS[i]}/header.jpg", path_combine);
                 }
+                if (!File.Exists($"{Settings.path}\\{SX.games_APPIDS[i]}.txt"))
+                {
+                    Achievements.CreateCheme(SX.games_APPIDS[i]);
+                }
+                //button
                 Button button = new Button();
                 button.BackgroundImage = Image.FromFile(path_combine);
                 button.BackgroundImageLayout = ImageLayout.Stretch;
@@ -41,27 +48,62 @@ namespace SteamAchievementsPirate
                 button.Click += NewButton_Click;
                 button.Tag = SX.games_APPIDS[i];
                 button.Size = new Size(200, 93);
-                if (i % 4 == 0)
+                //button
+                //label
+                Label label = new Label();
+                string game_name = $"Application Number {i}";
+                //string game_name = File.ReadAllText($"{SX.games_APPIDS[i]}_info.txt").Split('|')[1];
+                label.Text = $"{game_name}";
+                label.ForeColor = Color.White;
+                label.BackColor = Color.Transparent;
+                label.AutoSize = true;
+                //label
+                if ((i % 4 == 0) && i != 0)
                 {
-                    if (i != 0)
-                    {
-                        sloy++;
-                        list_pos = 0;
-                    }
+                    sloy++;
+                    list_pos = 0;
                 }
                 if (sloy == 0)
                 {
                     button.Location = new Point(210 * list_pos, sloy);
+                    label.Location = new Point(210 * list_pos, 100);
                     list_pos++;
                 }
                 else
                 {
-                    button.Location = new Point(210 * list_pos, sloy * 120);
+                    button.Location = new Point(210 * list_pos, sloy + 130);
+                    label.Location = new Point(210 * list_pos, sloy + 230);
                     list_pos++;
                 }
                 panel1.Controls.Add(button);
+                panel1.Controls.Add(label);
             }
         }
+        private void NewButton_Click(object sender, EventArgs e)
+        {
+            Button SenderButton = (Button)sender;
+            var appid = SenderButton.Tag.ToString();
+            app_id = appid;
+            // off
+            panel1.Enabled = false;
+            panel1.Visible = false;
+            // off
+            Panel panel = new Panel
+            {
+                AutoScroll = true,
+                Location = new Point(10, 25),
+                Size = new Size(830, 400),
+                BorderStyle = BorderStyle.None
+            };
+            this.Controls.Add(panel);
+            var ultra = Sort(appid, panel, false, 0);
+            Sort(appid, panel, true, ultra.Item1);
+            int count_hidden = ultra.Item2;
+            int unlocked_ach = ultra.Item3;
+            int locked_ach = ultra.Item4;
+            //label_information.Text = $"Hidden: {count_hidden}\nUnlocked: {unlocked_ach}\nLocked: {locked_ach}";
+        }
+
         private (int, int, int, int) Sort(string appid, Panel panel, bool locked, int i)
         {
             try
@@ -135,6 +177,7 @@ namespace SteamAchievementsPirate
                                 Text = $"{displayName}",
                                 Font = new Font("Arial", 14, FontStyle.Bold),
                                 Location = new Point(90, 13 + (74 * i)),
+                                ForeColor = Color.FromArgb(203, 205, 207),
                                 AutoSize = true
                             };
                             Label newLabel2 = new Label
@@ -142,6 +185,7 @@ namespace SteamAchievementsPirate
                                 Text = $"{description}",
                                 Location = new Point(90, 43 + (74 * i)),
                                 Font = new Font("Arial", 8),
+                                ForeColor = Color.FromArgb(184, 188, 191),
                                 AutoSize = true
                             };
                             panel.Controls.Add(newPictureBox);
@@ -180,6 +224,7 @@ namespace SteamAchievementsPirate
                             Label newLabel = new Label
                             {
                                 Text = $"{displayName}",
+                                ForeColor = Color.FromArgb(203, 205, 207),
                                 Font = new Font("Arial", 14, FontStyle.Bold),
                                 Location = new Point(90, 13 + (74 * i)),
                                 AutoSize = true
@@ -189,7 +234,7 @@ namespace SteamAchievementsPirate
                                 Text = $"{description}",
                                 Location = new Point(90, 43 + (74 * i)),
                                 Font = new Font("Arial", 9),
-                                ForeColor = Color.Gray,
+                                ForeColor = Color.FromArgb(184, 188, 191),
                                 AutoSize = true
                             };
                             Label percent = new Label
@@ -197,7 +242,7 @@ namespace SteamAchievementsPirate
                                 Text = $"{displayNameFinoUgr}% of players have this achievement",
                                 Location = new Point(90, 58 + (74 * i)),
                                 Font = new Font("Arial", 9),
-                                ForeColor = Color.Gray,
+                                ForeColor = Color.FromArgb(139, 146, 154),
                                 AutoSize = true
                             };
                             panel.Controls.Add(newPictureBox);
@@ -217,7 +262,6 @@ namespace SteamAchievementsPirate
             }
             catch (FileNotFoundException ex)
             {
-                MessageBox.Show(ex.ToString());
                 Achievements.DownloadAchievements(appid);
                 Sort(appid, panel, locked, i);
                 return (0, 0, 0, 0);
@@ -227,35 +271,6 @@ namespace SteamAchievementsPirate
                 Settings.Exp(ex);
                 return (0, 0, 0, 0);
             }
-        }
-
-
-        private void NewButton_Click(object sender, EventArgs e)
-        {
-            Button button = (Button)sender;
-            var localik_app_id = button.Tag;
-            //Panel oldPanel = this.Controls.OfType<Panel>().FirstOrDefault();
-            //if (oldPanel != null)
-            //{
-            //    this.Controls.Remove(oldPanel);
-            //    oldPanel.Dispose();
-            //}
-            //Button button = (Button)sender;
-            //string appid = button.Text;
-            //app_id = appid;
-            //Panel panel = new Panel
-            //{
-            //    AutoScroll = true,
-            //    Location = new Point(100, 5),
-            //    Size = new Size(680, 450)
-            //};
-            //this.Controls.Add(panel);
-            //var ultra = Sort(appid, panel, false, 0);
-            //Sort(appid, panel, true, ultra.Item1);
-            //int count_hidden = ultra.Item2;
-            //int unlocked_ach = ultra.Item3;
-            //int locked_ach = ultra.Item4;
-            //label_information.Text = $"Hidden: {count_hidden}\nUnlocked: {unlocked_ach}\nLocked: {locked_ach}";
         }
 
         private void AchievementsForm_Load(object sender, EventArgs e)
