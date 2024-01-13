@@ -67,6 +67,7 @@ namespace SteamAchievementsPirate
         {
             while (Settings.ThreadIsStart)
             {
+                Console.WriteLine("[codex] +");
                 Task.Delay(1000).Wait();
                 string path_combin = Path.Combine(Settings.path, $"{appid}_info.txt");
                 string local_path = Path.Combine(Settings.path, $"{appid}_achievements.txt");
@@ -82,7 +83,7 @@ namespace SteamAchievementsPirate
                             eblatoriy = eblatoriy.Replace("\r", "");
                         }
 #if DEBUG
-                        Console.WriteLine($"[debug] Получено достижение: {one_achivment}");
+                        Console.WriteLine($"[CODEX] Получено достижение: {one_achivment}");
 #endif
                         fck_line.Add(one_achivment);
                         File.WriteAllLines(local_path, fck_line);

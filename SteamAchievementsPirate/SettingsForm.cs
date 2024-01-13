@@ -19,6 +19,7 @@ namespace SteamAchievementsPirate
             locationoverlay_box.Text = GetTextOverlayLocation(Settings.overlay_location);
             pathBox.Text = string.Join(";", Settings.games_path);
             NotifStyleComboBox.Text = GetNotifStyleText(Settings.notif_style);
+            startparserbox1.Checked = Settings.StartParserFromStart;
         }
 
         private void button1_Click(object sender, EventArgs e)

@@ -282,6 +282,7 @@ namespace SteamAchievementsPirate
                                 ForeColor = Color.FromArgb(203, 205, 207),
                                 Font = new Font("Arial", 14, FontStyle.Bold),
                                 Location = new Point(90, 13 + (74 * i)),
+                                BackColor = Color.FromArgb(35, 38, 46),
                                 AutoSize = true
                             };
                             Label newLabel2 = new Label
@@ -290,6 +291,7 @@ namespace SteamAchievementsPirate
                                 Location = new Point(90, 43 + (74 * i)),
                                 Font = new Font("Arial", 9),
                                 ForeColor = Color.FromArgb(184, 188, 191),
+                                BackColor = Color.FromArgb(35, 38, 46),
                                 AutoSize = true
                             };
                             Label percent = new Label
@@ -298,6 +300,7 @@ namespace SteamAchievementsPirate
                                 Location = new Point(90, 58 + (74 * i)),
                                 Font = new Font("Arial", 9),
                                 ForeColor = Color.FromArgb(139, 146, 154),
+                                BackColor = Color.FromArgb(35, 38, 46),
                                 AutoSize = true
                             };
                             panel.Controls.Add(newPictureBox);

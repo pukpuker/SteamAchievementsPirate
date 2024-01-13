@@ -82,6 +82,7 @@ namespace SteamAchivmentsForPirates
 
         public static void StartThreads()
         {
+            Settings.ThreadIsStart = true;
             foreach (var app_id in Codex_appids)
             {
                 Codex.FirstStart(app_id);
@@ -103,7 +104,6 @@ namespace SteamAchivmentsForPirates
                 var thread_InfinityParser = new Thread(() => FreeTP.InfinityParserFreeTP(app_id));
                 thread_InfinityParser.Start();
             }
-            Settings.StartThreads = true;
         }
 
         public static void StartParser()
@@ -122,6 +122,7 @@ namespace SteamAchivmentsForPirates
 #endif
             if (args.Length > 0 && args[0] == "autostart")
             {
+                Console.WriteLine("[debug] running from autostart");
                 Settings.FromAutoRun = true;
             }
             System.IO.Directory.SetCurrentDirectory(System.AppDomain.CurrentDomain.BaseDirectory);
@@ -129,6 +130,7 @@ namespace SteamAchivmentsForPirates
             GetLastVersion();
             if (Settings.StartParserFromStart)
             {
+                Console.WriteLine("[StartPraserFromStart] Go.");
                 Achievements.ParsingGames();
             }
             string games = Games();

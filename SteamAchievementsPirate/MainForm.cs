@@ -50,7 +50,7 @@ namespace SteamAchievementsPirate
 
         private void UpdateLabels()
         {
-            if (Settings.HaveGames && Settings.StartThreads)
+            if (Settings.HaveGames && Settings.ThreadIsStart)
             {
                 label1.Text = "Status: Work";
                 button1.Text = "Stop Parser";
@@ -76,14 +76,14 @@ namespace SteamAchievementsPirate
 
         private void button1_Click(object sender, EventArgs e)
         {
-            if (Settings.StartThreads)
+            if (Settings.ThreadIsStart)
             {
                 button1.Enabled = false;
                 SX.StartThreadsThread.Interrupt();
-                Settings.StartThreads = false;
+                Settings.ThreadIsStart = false;
                 button1.Enabled = true;
             }
-            else if (!Settings.StartThreads)
+            else if (!Settings.ThreadIsStart)
             {
                 button1.Enabled = false;
                 SX.StartThreads();
@@ -110,7 +110,7 @@ namespace SteamAchievementsPirate
 
         private void button5_Click(object sender, EventArgs e)
         {
-            if (!Settings.StartThreads)
+            if (!Settings.ThreadIsStart)
             {
                 Actions.Parse();
             }

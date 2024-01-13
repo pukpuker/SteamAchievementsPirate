@@ -21,7 +21,7 @@ namespace SteamAchivmentsForPirates
         public static string language = "";
         public static List<string> games_path = new List<string>();
         public static bool StartUP = false;
-        public static bool StartThreads = false;
+        public static bool StartThreads = false; // from start app
         public static bool StartParserFromStart = false;
         public static string notif_style = "";
         public static string overlay_location = "";
