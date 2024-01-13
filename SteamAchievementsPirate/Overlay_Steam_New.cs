@@ -15,6 +15,7 @@ public class OverlaySteamNewForm : Form
     static readonly IntPtr HWND_TOPMOST = new IntPtr(-1);
     const uint SWP_NOSIZE = 0x0001;
     const uint SWP_NOMOVE = 0x0002;
+    Image image;
 
     System.Windows.Forms.Timer timer, timerHide;
     int endPosY;
@@ -45,10 +46,22 @@ public class OverlaySteamNewForm : Form
         else
         {
             endPosY = Screen.PrimaryScreen.Bounds.Height - this.Height - WithOverlay;
-            location = Screen.PrimaryScreen.Bounds.Height - this.Height - -50;
+            location = Screen.PrimaryScreen.Bounds.Height - this.Height - -60;
             this.Location = new Point(Screen.PrimaryScreen.Bounds.Width - this.Width, location);
         }
     }
+
+    public async Task<Task> PhotoDownAsync(string url)
+    {
+        WebRequest request = WebRequest.Create(url);
+        using (WebResponse response = await request.GetResponseAsync())
+        using (Stream stream = response.GetResponseStream())
+        {
+            image = Image.FromStream(stream);
+        }
+        return Task.CompletedTask;
+    }
+
 
     public OverlaySteamNewForm(string name, string description, string url)
     {
@@ -62,18 +75,12 @@ public class OverlaySteamNewForm : Form
         this.Opacity = 1;
         this.Size = new Size(283, 70);
         this.StartPosition = FormStartPosition.Manual;
+        this.DoubleBuffered = true;
+        this.BackgroundImage = SteamAchievementsPirate.Properties.Resources.steam_photo;
+
         bool swinarnik = false;
-        //var position = Screen.PrimaryScreen.Bounds.Height - this.Height - -50; // orig (RD)
-     
-        //var position = Screen.PrimaryScreen.Bounds.Top - this.Height - -70;
         ebatoriaya();
-        WebRequest request = WebRequest.Create(url);
-        Image image;
-        using (WebResponse response = request.GetResponse())
-        using (Stream stream = response.GetResponseStream())
-        {
-            image = Image.FromStream(stream);
-        }
+        PhotoDownAsync(url).Wait();
         SoundPlayer audio = new SoundPlayer(SteamAchievementsPirate.Properties.Resources.desktop_toast_default);
         audio.Play();
         PictureBox pictureBoxBackground = new PictureBox
@@ -127,7 +134,6 @@ public class OverlaySteamNewForm : Form
         }
         this.Controls.Add(pictureBox);
         pictureBoxBackground.SendToBack();
-        this.BackgroundImage = SteamAchievementsPirate.Properties.Resources.steam_photo;
         timer = new System.Windows.Forms.Timer();
         timer.Interval = 1;
         if (Settings.overlay_location == "RU" || Settings.overlay_location == "LU")
@@ -148,23 +154,11 @@ public class OverlaySteamNewForm : Form
     {
         if (this.Location.Y < endPosY)
         {
-            this.Location = new Point(this.Location.X, this.Location.Y + 5);
+            MoveForm(5);
         }
         else
         {
-            timer.Stop();
-            Task.Delay(5000).Wait();
-            timerHide = new System.Windows.Forms.Timer();
-            timerHide.Interval = 1;
-            if (Settings.overlay_location == "RU" || Settings.overlay_location == "LU")
-            {
-                timerHide.Tick += TimerHideUP_Tick;
-            }
-            else
-            {
-                timerHide.Tick += TimerHide_Tick;
-            }
-            timerHide.Start();
+            StopTimerAndStartHideTimer(TimerHideUP_Tick);
         }
     }
 
@@ -172,28 +166,23 @@ public class OverlaySteamNewForm : Form
     {
         if (this.Location.Y > Screen.PrimaryScreen.Bounds.Top - 50)
         {
-            this.Location = new Point(this.Location.X, this.Location.Y - 5);
+            MoveForm(-5);
         }
         else
         {
-            timerHide.Stop();
-            this.Close();
+            StopTimerAndCloseForm();
         }
     }
+
     private void Timer_Tick(object sender, EventArgs e)
     {
         if (this.Location.Y > endPosY)
         {
-            this.Location = new Point(this.Location.X, this.Location.Y - 5);
+            MoveForm(-5);
         }
         else
         {
-            timer.Stop();
-            Task.Delay(5000).Wait();
-            timerHide = new System.Windows.Forms.Timer();
-            timerHide.Interval = 1;
-            timerHide.Tick += TimerHide_Tick;
-            timerHide.Start();
+            StopTimerAndStartHideTimer(TimerHide_Tick);
         }
     }
 
@@ -201,12 +190,33 @@ public class OverlaySteamNewForm : Form
     {
         if (this.Location.Y < Screen.PrimaryScreen.Bounds.Height)
         {
-            this.Location = new Point(this.Location.X, this.Location.Y + 5);
+            MoveForm(5);
         }
         else
         {
-            timerHide.Stop();
-            this.Close();
+            StopTimerAndCloseForm();
         }
     }
+
+    private void MoveForm(int pixels)
+    {
+        this.Location = new Point(this.Location.X, this.Location.Y + pixels);
+    }
+
+    private void StopTimerAndStartHideTimer(EventHandler tickEvent)
+    {
+        timer.Stop();
+        Task.Delay(5000).Wait();
+        timerHide = new System.Windows.Forms.Timer();
+        timerHide.Interval = 1;
+        timerHide.Tick += tickEvent;
+        timerHide.Start();
+    }
+
+    private void StopTimerAndCloseForm()
+    {
+        timerHide.Stop();
+        this.Close();
+    }
+
 }
