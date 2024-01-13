@@ -80,10 +80,20 @@ namespace SteamAchivmentsForPirates
         {
             try
             {
-                string json = ugar.DownloadString($"https://store.steampowered.com/api/appdetails?appids={appid}");
-                JObject obj = JObject.Parse(json);
-                string game_name = (string)obj[appid]["data"]["name"];
-                return game_name;
+                string json_first_attempt = ugar.DownloadString($"https://store.steampowered.com/api/appdetails?appids={appid}");
+                JObject obj_first_attempt = JObject.Parse(json_first_attempt);
+                if (bool.Parse(obj_first_attempt[appid]["sucesss"].ToString()))
+                {
+                    string game_name = (string)obj_first_attempt[appid]["data"]["name"];
+                    return game_name;
+                }
+                else
+                {
+                    string json = ugar.DownloadString($"https://api.steampowered.com/ISteamUserStats/GetSchemaForGame/v2?appid={appid}&key={Settings.api_key}&l={Settings.language}");
+                    JObject obj = JObject.Parse(json);
+                    string game_name = (string)obj["game"]["gameName"];
+                    return game_name;
+                }
             }
             catch (WebException)
             {

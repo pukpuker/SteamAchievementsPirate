@@ -201,7 +201,7 @@ namespace SteamAchievementsPirate
                         locked_ach++;
                         local_locked = 1;
                     }
-                    if (hidden == 0)
+                    if (hidden == 0 || (!locked && local_locked == 0))
                     {
                         if (locked && local_locked == 1)
                         {
