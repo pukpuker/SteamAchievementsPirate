@@ -1,6 +1,6 @@
 ﻿using SteamAchivmentsForPirates;
 
-namespace SteamAchievementsPirate
+namespace SteamAchievementsPirate.Emulators
 {
     public static class Rune
     {
@@ -9,7 +9,7 @@ namespace SteamAchievementsPirate
             try
             {
                 int count = 0;
-                List<string> Local_Achivments = new System.Collections.Generic.List<string>();
+                List<string> Local_Achivments = new List<string>();
 
                 string xer = null;
                 string file = File.ReadAllText(path);
@@ -96,7 +96,7 @@ namespace SteamAchievementsPirate
         {
             try
             {
-                string rune = Path.Combine(System.Environment.GetEnvironmentVariable("PUBLIC"), "Documents\\Steam\\RUNE");
+                string rune = Path.Combine(Environment.GetEnvironmentVariable("PUBLIC"), "Documents\\Steam\\RUNE");
                 if (Directory.Exists(rune))
                 {
                     bool sto_proc = false;

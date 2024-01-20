@@ -1,7 +1,7 @@
 ﻿using SteamAchivmentsForPirates;
 using System.IO;
 
-namespace SteamAchievementsPirate
+namespace SteamAchievementsPirate.Emulators
 {
     public static class FreeTP
     {
@@ -9,7 +9,7 @@ namespace SteamAchievementsPirate
         {
             try
             {
-                List<string> Local_Achivments = new System.Collections.Generic.List<string>();
+                List<string> Local_Achivments = new List<string>();
 
                 foreach (var achivment in Directory.GetFiles(path))
                 {

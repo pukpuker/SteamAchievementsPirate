@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
 using SteamAchievementsPirate;
+using SteamAchievementsPirate.Emulators;
 using System.Diagnostics;
 using System.Net;
 

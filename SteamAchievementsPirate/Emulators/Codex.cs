@@ -1,6 +1,6 @@
 ﻿using SteamAchivmentsForPirates;
 
-namespace SteamAchievementsPirate
+namespace SteamAchievementsPirate.Emulators
 {
     public static class Codex
     {
@@ -9,7 +9,7 @@ namespace SteamAchievementsPirate
             try
             {
                 int count = 0;
-                List<string> Local_Achivments = new System.Collections.Generic.List<string>();
+                List<string> Local_Achivments = new List<string>();
 
                 string xer = null;
                 string file = File.ReadAllText(path);
@@ -97,7 +97,7 @@ namespace SteamAchievementsPirate
         {
             try
             {
-                string[] codex_path = { $"{Path.Combine(System.Environment.GetEnvironmentVariable("PUBLIC"), "Documents\\Steam\\CODEX")}", $"{Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Steam\\Codex")}", }; 
+                string[] codex_path = { $"{Path.Combine(Environment.GetEnvironmentVariable("PUBLIC"), "Documents\\Steam\\CODEX")}", $"{Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Steam\\Codex")}", };
                 foreach (var codex_NEW in codex_path)
                 {
                     if (Directory.Exists(codex_NEW))

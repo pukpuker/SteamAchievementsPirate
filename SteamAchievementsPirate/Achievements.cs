@@ -1,5 +1,5 @@
 ﻿using Newtonsoft.Json.Linq;
-using SteamAchievementsPirate;
+using SteamAchievementsPirate.Emulators;
 using System.Net;
 
 namespace SteamAchivmentsForPirates
