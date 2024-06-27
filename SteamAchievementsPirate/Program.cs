@@ -12,6 +12,7 @@ namespace SteamAchivmentsForPirates
         public static List<string> Codex_appids = new List<string>();
         public static List<string> Rune_appids = new List<string>();
         public static List<string> FreeTP_appids = new List<string>();
+        public static List<string> GoldBerg_appids = new List<string>();
 
         public static Thread StartThreadsThread = new Thread(StartThreads);
 
@@ -76,6 +77,10 @@ namespace SteamAchivmentsForPirates
                     {
                         FreeTP_appids.Add(app_id);
                     }
+                    else if (emu == "GoldBerg")
+                    {
+                        GoldBerg_appids.Add(app_id);
+                    }
                 }
             }
             return games;
@@ -105,6 +110,13 @@ namespace SteamAchivmentsForPirates
                 var thread_InfinityParser = new Thread(() => FreeTP.InfinityParserFreeTP(app_id));
                 thread_InfinityParser.Start();
             }
+            foreach (var app_id in GoldBerg_appids)
+            {
+                GoldBerg.FirstStart(app_id);
+                Task.Delay(300).Wait();
+                var thread_InfinityParser = new Thread(() => GoldBerg.InfinityParser(app_id));
+                thread_InfinityParser.Start();
+            }
         }
 
         public static void StartParser()
@@ -121,10 +133,13 @@ namespace SteamAchivmentsForPirates
             Settings.AllocConsole();
             Settings.ChangeTitle();
 #endif
-            if (args.Length > 0 && args[0] == "autostart")
+            if (args != null)
             {
-                Console.WriteLine("[debug] running from autostart");
-                Settings.FromAutoRun = true;
+                if (args.Length > 0 && args[0] == "autostart")
+                {
+                    Console.WriteLine("[debug] running from autostart");
+                    Settings.FromAutoRun = true;
+                }
             }
             System.IO.Directory.SetCurrentDirectory(System.AppDomain.CurrentDomain.BaseDirectory);
             Settings.SettingsParser();

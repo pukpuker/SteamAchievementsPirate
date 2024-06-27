@@ -181,7 +181,8 @@ namespace SteamAchivmentsForPirates
             bool codex = Codex.Parse();
             bool rune = Rune.Parse();
             bool freetp = FreeTP.Parse();
-            if ((codex || freetp || rune) == true)
+            bool goldberg = GoldBerg.Parse();
+            if ((codex || freetp || rune || goldberg) == true)
             {
                 return true;
             }

@@ -1,5 +1,4 @@
-﻿using SteamAchievementsPirate.Properties;
-using SteamAchivmentsForPirates;
+﻿using SteamAchivmentsForPirates;
 using System.Media;
 using System.Net;
 using System.Runtime.InteropServices;
