@@ -55,12 +55,38 @@ namespace SteamAchievementsPirate.Emulators
             }
         }
 
-        public static void FirstStart(string appid)
+        public static bool FirstStart(string appid)
         {
-            string path_combin = Path.Combine(Settings.path, $"{appid}_info.txt");
-            var CounterDristos = GetCountRune(File.ReadAllText(path_combin).Split('|')[0]);
-            string local_path = Path.Combine(Settings.path, $"{appid}_achievements.txt");
-            File.WriteAllText(local_path, string.Join("\r\n", CounterDristos.Item2));
+            try
+            {
+                string path_combin = Path.Combine(Settings.path, $"{appid}_info.txt");
+                string path_getter_to_count = File.ReadAllText(path_combin).Split('|')[0];
+                if (Directory.Exists(path_getter_to_count))
+                {
+                    var CounterDristos = GetCountRune(path_getter_to_count);
+                    string local_path = Path.Combine(Settings.path, $"{appid}_achievements.txt");
+                    File.WriteAllText(local_path, string.Join("\r\n", CounterDristos.Item2));
+                    return true;
+                }
+                else
+                {
+                    var result = MessageBox.Show($"Game file not found: {File.ReadAllText(path_combin).Split('|')[1]} ({File.ReadAllText(path_combin).Split('|')[2]}). Delete the file with YOUR open achievements for this game?", "SAP", MessageBoxButtons.YesNo, MessageBoxIcon.Error);
+                    if (result == DialogResult.Yes)
+                    {
+                        File.Delete($"{appid}_achievements.txt");
+                    }
+                    File.Delete($"{appid}.txt");
+                    File.Delete($"{appid}_percents.txt");
+                    File.Delete(path_combin);
+                    return false;
+
+                }
+            }
+            catch (Exception ex)
+            {
+                Settings.Exp(ex);
+                return false;
+            }
         }
 
         public static void InfinityParserRune(string appid)
