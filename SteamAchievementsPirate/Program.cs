@@ -91,33 +91,21 @@ namespace SteamAchivmentsForPirates
             Settings.ThreadIsStart = true;
             foreach (var app_id in Codex_appids)
             {
-                var ok = Codex.FirstStart(app_id);
-                if (ok)
-                {
-                    Task.Delay(300).Wait();
-                    var thread_InfinityParser = new Thread(() => Codex.InfinityParserCodex(app_id));
-                    thread_InfinityParser.Start();
-                }
+                Task.Delay(300).Wait();
+                var thread_InfinityParser = new Thread(() => Codex.InfinityParserCodex(app_id));
+                thread_InfinityParser.Start();
             }
             foreach (var app_id in Rune_appids)
             {
-                var ok = Rune.FirstStart(app_id);
-                if (ok)
-                {
-                    Task.Delay(300).Wait();
-                    var thread_InfinityParser = new Thread(() => Rune.InfinityParserRune(app_id));
-                    thread_InfinityParser.Start();
-                }
+                Task.Delay(300).Wait();
+                var thread_InfinityParser = new Thread(() => Rune.InfinityParserRune(app_id));
+                thread_InfinityParser.Start();
             }
             foreach (var app_id in FreeTP_appids)
             {
-                var ok = FreeTP.FirstStart(app_id);
-                if (ok)
-                {
-                    Task.Delay(300).Wait();
-                    var thread_InfinityParser = new Thread(() => FreeTP.InfinityParserFreeTP(app_id));
-                    thread_InfinityParser.Start();
-                }
+                Task.Delay(300).Wait();
+                var thread_InfinityParser = new Thread(() => FreeTP.InfinityParserFreeTP(app_id));
+                thread_InfinityParser.Start();
             }
             foreach (var app_id in GoldBerg_appids)
             {

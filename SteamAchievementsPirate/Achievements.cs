@@ -184,6 +184,7 @@ namespace SteamAchivmentsForPirates
             bool goldberg = GoldBerg.Parse();
             if ((codex || freetp || rune || goldberg) == true)
             {
+                SX.Games();
                 return true;
             }
             else
